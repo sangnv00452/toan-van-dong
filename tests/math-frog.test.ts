@@ -154,3 +154,12 @@ describe('Math Frog games', () => {
     }
   });
 });
+
+describe('lesson pictures', () => {
+  it('has an animated picture for every theory page', async () => {
+    const { ART } = await import('../src/scenes/lesson-art');
+    for (const c of CHAPTERS) {
+      for (const t of c.topics) expect(ART[t.id]?.length, t.id).toBe(t.theory.length);
+    }
+  });
+});

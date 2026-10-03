@@ -131,6 +131,7 @@ class NinjaRound extends BaseRound {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
+    this.buddy.draw(ctx, this.cx, H - 55, 0.75, { headband: true });
     for (const h of this.halves) {
       ctx.save();
       ctx.globalAlpha = Math.max(0, h.life);

@@ -1,6 +1,5 @@
 import { PALETTE } from '../config';
 import { emoji, panel, text } from '../core/draw';
-import { drawFrog } from '../core/frog-art';
 import type { Pointer } from '../core/input';
 import { shuffle } from '../math/random';
 import { sequenceQuestion, type SequenceQuestion } from '../math/sequences';
@@ -113,7 +112,7 @@ class StairsRound extends BaseRound {
     const lower = Math.floor(k);
     const hop = Math.sin((k - lower) * Math.PI) * 40;
     const cy = this.stepY(lower) + (this.stepY(Math.min(3, lower + 1)) - this.stepY(lower)) * (k - lower);
-    drawFrog(ctx, this.stepX(0) + k * STEP_W, cy - 40 - hop, 0.55, { mood: 'happy', look: 0.8 });
+    this.buddy.draw(ctx, this.stepX(0) + k * STEP_W, cy - 40 - hop, 0.55);
     // Tiles
     for (const t of this.tiles) {
       if (t.used) continue;

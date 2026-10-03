@@ -32,6 +32,48 @@ export class Sfx {
     osc.stop(t0 + dur + 0.02);
   }
 
+  /**
+   * Frog "ộp ộp": two short raspy bursts. A sawtooth voice is chopped ~40 times
+   * a second (that rattle is what makes it sound like a frog) and filtered.
+   * `pitch` < 1 gives a lower, sadder croak.
+   */
+  croak(pitch = 1): void {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state !== 'running') return;
+    for (const [start, dur] of [
+      [0, 0.16],
+      [0.22, 0.22],
+    ]) {
+      const t0 = ctx.currentTime + start;
+      const voice = ctx.createOscillator();
+      voice.type = 'sawtooth';
+      voice.frequency.setValueAtTime(170 * pitch, t0);
+      voice.frequency.linearRampToValueAtTime(240 * pitch, t0 + dur * 0.4);
+      voice.frequency.linearRampToValueAtTime(150 * pitch, t0 + dur);
+      const rattle = ctx.createOscillator();
+      rattle.type = 'square';
+      rattle.frequency.value = 38;
+      const rattleDepth = ctx.createGain();
+      rattleDepth.gain.value = 0.5;
+      const chop = ctx.createGain();
+      chop.gain.value = 0.5;
+      rattle.connect(rattleDepth).connect(chop.gain);
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 650 * pitch;
+      filter.Q.value = 2.5;
+      const amp = ctx.createGain();
+      amp.gain.setValueAtTime(0.0001, t0);
+      amp.gain.exponentialRampToValueAtTime(0.9, t0 + 0.02);
+      amp.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      voice.connect(chop).connect(filter).connect(amp).connect(ctx.destination);
+      for (const osc of [voice, rattle]) {
+        osc.start(t0);
+        osc.stop(t0 + dur + 0.02);
+      }
+    }
+  }
+
   correct(): void {
     this.tone(660, 0, 0.12, 'triangle', 0.25);
     this.tone(990, 0.09, 0.2, 'triangle', 0.25);

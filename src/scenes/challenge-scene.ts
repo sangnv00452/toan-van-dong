@@ -2,8 +2,10 @@ import type { App, Scene } from '../app';
 import { H, HUD_H, PALETTE, W } from '../config';
 import { DwellButton } from '../core/dwell-button';
 import { panel, text } from '../core/draw';
+import { speechBubble } from '../core/frog-art';
 import { Effects } from '../core/effects';
 import { xpFor } from '../core/progress';
+import { praise, say } from '../core/voice';
 import type { ChallengeRound, FrogGameDef } from '../games/frog/types';
 import type { Difficulty } from '../math/grade5';
 import { ChallengeResultScene, type ChallengeOutcome } from './challenge-result-scene';
@@ -20,6 +22,8 @@ export class ChallengeScene implements Scene {
   private correct = 0;
   private wrong = 0;
   private outcome: ChallengeOutcome | null = null;
+  /** Seconds left showing Green's "Đói quá!" bubble after a wrong answer. */
+  private hungry = 0;
   private readonly goal: number;
   private readonly limit: number | null;
   private timeLeft: number;
@@ -47,6 +51,7 @@ export class ChallengeScene implements Scene {
         if (this.state !== 'play') return;
         this.correct++;
         this.app.sfx.correct();
+        praise(() => this.app.sfx.croak(1.35));
         this.fx.float(x, y, '+1', PALETTE.yellow, 52);
         this.fx.burst(x, y, PALETTE.yellow, 18);
         if (this.correct >= this.goal) this.finish(true, 'Giỏi quá! Em đã hoàn thành thử thách!');
@@ -56,6 +61,9 @@ export class ChallengeScene implements Scene {
         this.wrong++;
         this.app.sfx.wrong();
         this.fx.float(x, y, '✗', PALETTE.red, 56);
+        // Green is still hungry: he says so (or croaks sadly if the computer has no Vietnamese voice).
+        this.hungry = 1.8;
+        say('Đói quá!', () => this.app.sfx.croak(0.7));
       },
       fail: (reason) => this.finish(false, reason),
     });
@@ -70,6 +78,7 @@ export class ChallengeScene implements Scene {
     if (cleared) {
       p.markCleared(this.game.id, this.difficulty, this.level);
       this.app.sfx.cheer();
+      say('Hoan hô! Qua màn rồi!', () => this.app.sfx.croak(1.35));
       this.fx.confetti(W / 2, H);
     }
     const xp = xpFor(this.correct, cleared);
@@ -79,6 +88,7 @@ export class ChallengeScene implements Scene {
 
   update(dt: number): void {
     this.fx.update(dt);
+    this.hungry = Math.max(0, this.hungry - dt);
     if (this.exit.update(dt, this.app.input)) {
       this.app.setScene(new FrogLevelScene(this.app, this.game, this.difficulty, this.level));
       return;
@@ -114,6 +124,7 @@ export class ChallengeScene implements Scene {
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.round?.draw(ctx);
+    if (this.round && this.hungry > 0) this.drawHungry(ctx, this.round.frog());
     this.fx.draw(ctx);
     this.drawHud(ctx);
     if (this.state === 'countdown') {
@@ -122,6 +133,16 @@ export class ChallengeScene implements Scene {
       text(ctx, this.game.goalText(this.difficulty, this.level), W / 2, 300, { size: 30, maxWidth: W - 340 });
       text(ctx, String(Math.ceil(this.countdown)), W / 2, 420, { size: 130, outline: PALETTE.ink });
     }
+  }
+
+  /** "Đói quá!" bubble beside Green (to his left when he is near the right edge). */
+  private drawHungry(ctx: CanvasRenderingContext2D, frog: { x: number; y: number }): void {
+    const w = 200;
+    const h = 64;
+    const x = frog.x + 70 + w < W ? frog.x + 70 : frog.x - 70 - w;
+    const y = Math.max(HUD_H + 80, frog.y - 150);
+    speechBubble(ctx, x, y, w, h, frog.x, frog.y - 40);
+    text(ctx, 'Đói quá! 😩', x + w / 2, y + h / 2, { size: 30, color: PALETTE.ink });
   }
 
   private drawHud(ctx: CanvasRenderingContext2D): void {

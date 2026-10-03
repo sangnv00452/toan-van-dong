@@ -29,6 +29,8 @@ class KeeperRound extends BaseRound {
   private spawnTimer = 0.5;
   private readonly spawnEvery: number;
   private readonly flight: number;
+  /** Sideways dive of goalkeeper Green (px from the goal centre), easing back to 0. */
+  private dive = 0;
 
   constructor(rc: RoundContext) {
     super(rc);
@@ -45,6 +47,7 @@ class KeeperRound extends BaseRound {
 
   protected tick(dt: number, pointers: Pointer[]): void {
     const r = this.region;
+    this.dive *= Math.max(0, 1 - dt * 3);
     this.spawnTimer -= dt;
     if (this.spawnTimer <= 0) {
       this.spawnTimer = this.spawnEvery;
@@ -67,6 +70,7 @@ class KeeperRound extends BaseRound {
       const touched = b.touch.check(pointers, (x, y) => inCircle(x, y, p.x, p.y, BASE_RADIUS * p.s));
       if (touched && p.s >= BLOCKABLE_SCALE) {
         b.t = Infinity; // removed below
+        this.dive = p.x - this.cx;
         if (b.correct) {
           this.good(p.x, p.y, PALETTE.green);
           this.rc.fx.float(p.x, p.y - 70, 'Chặn đẹp!', PALETTE.green, 38);
@@ -91,6 +95,7 @@ class KeeperRound extends BaseRound {
     ctx.lineTo(r.x + r.w - 30, this.top + 120);
     ctx.lineTo(r.x + r.w - 30, H);
     ctx.stroke();
+    this.buddy.draw(ctx, this.cx + this.dive * 0.6, H - 75, 0.85);
     // Furthest balls first, so near ones are on top.
     for (const b of [...this.balls].sort((a, c) => a.t - c.t)) {
       const p = this.pos(b);

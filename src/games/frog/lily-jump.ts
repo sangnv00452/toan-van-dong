@@ -135,26 +135,28 @@ class LilyJumpRound implements ChallengeRound {
     drawPond(ctx, this.time, 0.5, this.scroll);
     for (const p of new Set([...this.behind, ...this.column, this.current])) this.drawPad(ctx, p);
 
-    // Green: on a pad, mid-jump, or sinking.
-    let fx = this.screenX(this.current);
-    let fy = this.current.y - 34;
-    let alpha = 1;
-    if (this.jump) {
-      const k = this.jump.t / JUMP_TIME;
-      const a = this.jump.from;
-      const b = this.jump.to;
-      fx = this.screenX(a) + (this.screenX(b) - this.screenX(a)) * k;
-      fy = a.y + (b.y - a.y) * k - 34 - Math.sin(k * Math.PI) * 130;
-    } else if (this.falling) {
-      fy += this.falling.t * 90;
-      alpha = Math.max(0, 1 - this.falling.t * 0.9);
-    }
-    ctx.globalAlpha = alpha;
+    const { x: fx, y: fy } = this.frog();
+    ctx.globalAlpha = this.falling ? Math.max(0, 1 - this.falling.t * 0.9) : 1;
     drawFrog(ctx, fx, fy, 0.72, { mood: this.falling ? 'sad' : 'happy', blink: this.time % 3.5 < 0.12, look: 0.8 });
     ctx.globalAlpha = 1;
 
     panel(ctx, r.x + 16, HUD_H + 6, r.w - 32, 64, 20, 'rgba(255,255,255,0.93)');
     text(ctx, this.q.text, r.x + r.w / 2, HUD_H + 39, { size: 34, color: PALETTE.ink, maxWidth: r.w - 64 });
+  }
+
+  /** Green's position: on a pad, mid-jump, or sinking. */
+  frog(): { x: number; y: number } {
+    if (this.jump) {
+      const k = this.jump.t / JUMP_TIME;
+      const a = this.jump.from;
+      const b = this.jump.to;
+      return {
+        x: this.screenX(a) + (this.screenX(b) - this.screenX(a)) * k,
+        y: a.y + (b.y - a.y) * k - 34 - Math.sin(k * Math.PI) * 130,
+      };
+    }
+    const sink = this.falling ? this.falling.t * 90 : 0;
+    return { x: this.screenX(this.current), y: this.current.y - 34 + sink };
   }
 
   private drawPad(ctx: CanvasRenderingContext2D, p: Pad): void {

@@ -23,6 +23,8 @@ export interface ChallengeContext {
 export interface ChallengeRound {
   update(dt: number, pointers: Pointer[]): void;
   draw(ctx: CanvasRenderingContext2D): void;
+  /** Where Green is now, so the challenge screen can put his speech bubble next to him. */
+  frog(): { x: number; y: number };
 }
 
 /** One Math Frog practice game: 3 difficulties × 5 levels, each level a challenge. */

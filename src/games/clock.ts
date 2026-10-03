@@ -73,6 +73,7 @@ class ClockRound extends BaseRound {
     this.q.lines.forEach((line, i) => {
       text(ctx, line, r.x + 250, this.top + 110 + i * 70, { size: 36, maxWidth: 400 });
     });
+    this.buddy.draw(ctx, r.x + 250, 610, 0.8, { teacher: true });
     // Clock face
     const { cxClock: cx, cyClock: cy, R } = this;
     ctx.beginPath();

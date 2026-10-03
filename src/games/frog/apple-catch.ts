@@ -54,6 +54,10 @@ class AppleCatchRound implements ChallengeRound {
     }));
   }
 
+  frog(): { x: number; y: number } {
+    return { x: this.frogX, y: this.frogY };
+  }
+
   update(dt: number, pointers: Pointer[]): void {
     this.time += dt;
     if (this.lock > 0) this.lock -= dt;

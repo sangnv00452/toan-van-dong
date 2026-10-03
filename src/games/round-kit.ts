@@ -1,6 +1,8 @@
 import { HUD_H, PALETTE } from '../config';
 import { panel, text } from '../core/draw';
 import type { Pointer } from '../core/input';
+import { praise } from '../core/voice';
+import { FrogBuddy } from './frog-buddy';
 import type { GameRound, RoundContext } from './types';
 
 export const inCircle = (px: number, py: number, cx: number, cy: number, r: number): boolean =>
@@ -35,11 +37,13 @@ export class TouchTracker {
   }
 }
 
-/** Shared helpers for game rounds: a short answer lock and the question banner. */
+/** Shared helpers for game rounds: a short answer lock, the question banner and Green the helper. */
 export abstract class BaseRound implements GameRound {
   /** While > 0 answers are ignored, so one wave cannot answer twice. */
   protected lock = 0;
   protected time = 0;
+  /** Green hops on right answers and frowns on wrong ones; each game draws him where he fits. */
+  protected readonly buddy = new FrogBuddy();
 
   constructor(protected readonly rc: RoundContext) {}
 
@@ -59,6 +63,7 @@ export abstract class BaseRound implements GameRound {
   update(dt: number, pointers: Pointer[]): void {
     this.time += dt;
     if (this.lock > 0) this.lock -= dt;
+    this.buddy.update(dt);
     this.tick(dt, pointers);
   }
 
@@ -75,11 +80,14 @@ export abstract class BaseRound implements GameRound {
     this.rc.addScore(1, x, y);
     this.rc.sfx.correct();
     this.rc.fx.burst(x, y, color, 22);
+    this.buddy.cheer();
+    praise(() => this.rc.sfx.croak(1.35));
   }
 
   protected bad(x: number, y: number, penalty = 0): void {
     if (penalty) this.rc.addScore(-penalty, x, y);
     else this.rc.fx.float(x, y, '✗', PALETTE.red, 56);
     this.rc.sfx.wrong();
+    this.buddy.frown();
   }
 }

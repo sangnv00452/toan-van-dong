@@ -105,7 +105,8 @@ class ShopRound extends BaseRound {
     // Basket bar
     const r = this.region;
     panel(ctx, r.x + 30, 600, r.w - 330, 92, 24, 'rgba(29,35,64,0.85)', PALETTE.yellow, 4);
-    emoji(ctx, '🧺', r.x + 80, 646, 52);
+    this.buddy.draw(ctx, r.x + 78, 638, 0.42);
+    emoji(ctx, '🧺', r.x + 104, 668, 30);
     const icons = this.cards.filter((c) => c.bought).map((c) => c.item.icon).join(' ');
     text(ctx, `Giỏ hàng: ${formatMoney(this.total)}`, r.x + 125, 646, { size: 38, align: 'left', color: PALETTE.yellow });
     if (icons) text(ctx, icons, r.x + r.w - 320, 646, { size: 36, align: 'right', weight: 400 });

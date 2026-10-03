@@ -5,9 +5,11 @@ import { panel, text, wrapLines } from '../core/draw';
 import { Effects } from '../core/effects';
 import { drawFrog, drawLilyPad, drawPond, speechBubble } from '../core/frog-art';
 import { xpFor } from '../core/progress';
+import { praise } from '../core/voice';
 import type { Chapter, Example, Exercise, Topic } from '../data/lessons';
 import { isCorrectAnswer } from '../math/answer-check';
 import { ChapterScene } from './chapter-scene';
+import { ART } from './lesson-art';
 
 type Page =
   | { kind: 'theory'; index: number; body: string }
@@ -130,6 +132,7 @@ export class LessonScene implements Scene {
     const x = BOARD.x + 220;
     if (a.correct) {
       this.app.sfx.correct();
+      praise(() => this.app.sfx.croak(1.35));
       this.fx.burst(x, 340, PALETTE.yellow, 26);
       this.fx.float(x, 300, '⭐ Đúng!', PALETTE.yellow, 40);
     } else {
@@ -188,7 +191,10 @@ export class LessonScene implements Scene {
     if (p.kind === 'theory') {
       say = 'Em đọc thật kỹ phần lý thuyết nhé!';
       this.heading(ctx, `📘 Lý thuyết ${p.index + 1}/${this.topic.theory.length}`);
-      this.paragraph(ctx, p.body, 200, 32, PALETTE.white, BOARD.w - 60);
+      const bottom = this.paragraph(ctx, p.body, 190, 28, PALETTE.white, BOARD.w - 60);
+      // Animated picture in the free space under the text.
+      const top = bottom - 4;
+      ART[this.topic.id]?.[p.index]?.(ctx, { x: BOARD.x + 30, y: top, w: BOARD.w - 60, h: BOARD.y + BOARD.h - 12 - top }, this.t);
     } else if (p.kind === 'example') {
       say = 'Xem mình giải từng bước nè!';
       this.heading(ctx, `✏️ Ví dụ ${p.index + 1}`);

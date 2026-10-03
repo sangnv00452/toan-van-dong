@@ -91,7 +91,10 @@ class MolesRound extends BaseRound {
         m.good = this.rule.test(m.value);
         m.state = 'hit';
         m.t = 0;
-        if (m.good) this.good(m.x, m.y - this.holeR);
+        if (m.good) {
+          this.good(m.x, m.y - this.holeR);
+          this.buddy.lick(m.x, m.y - this.holeR);
+        }
         else this.bad(m.x, m.y - this.holeR, 1);
       }
     }
@@ -122,6 +125,7 @@ class MolesRound extends BaseRound {
       ctx.strokeStyle = '#43a047';
       ctx.stroke();
     }
+    this.buddy.draw(ctx, this.cx, this.region.y + this.region.h - 40, 0.55);
     this.banner(ctx, `Chỉ bắt bọ mang ${this.rule.label}!`);
   }
 

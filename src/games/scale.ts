@@ -129,6 +129,7 @@ class ScaleRound extends BaseRound {
       ctx.fill();
       ctx.stroke();
     }
+    this.buddy.draw(ctx, px + 160, 650, 0.7);
     // Mystery box on the left pan
     const boxY = l.y + STRING_LEN;
     emoji(ctx, '📦', l.x, boxY - 50, 96);

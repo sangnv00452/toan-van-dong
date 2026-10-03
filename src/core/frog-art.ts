@@ -13,6 +13,8 @@ export interface FrogOpts {
   blink?: boolean;
   /** -1..1, where the pupils look horizontally. */
   look?: number;
+  /** Red ninja headband (Ếch Ninja Phân Số). */
+  headband?: boolean;
 }
 
 const BODY = '#43a047';
@@ -23,7 +25,7 @@ const ICE_DARK = '#6bb8de';
 
 /**
  * Green the frog, drawn with shapes (no image files). `x, y` is the middle of
- * the body; `s` = 1 draws a frog about 130 px wide.
+ * the body; `s` = 1 draws a chubby frog about 150 px wide.
  */
 export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, o: FrogOpts = {}): void {
   const body = o.frozen ? ICE : BODY;
@@ -54,26 +56,26 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
   ctx.fillStyle = dark;
   for (const side of [-1, 1]) {
     ctx.beginPath();
-    ctx.ellipse(side * 50, 30, 30, 20, side * 0.5, 0, Math.PI * 2);
+    ctx.ellipse(side * 60, 34, 32, 22, side * 0.5, 0, Math.PI * 2);
     ctx.fill();
   }
-  // Body and head
+  // Round, chubby body and a wide head
   ctx.fillStyle = body;
   ctx.beginPath();
-  ctx.ellipse(0, 12, 58, 44, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 16, 70, 52, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.beginPath();
-  ctx.ellipse(0, -22, 52, 34, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, -22, 58, 36, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = o.frozen ? '#e3f4fc' : BELLY;
   ctx.beginPath();
-  ctx.ellipse(0, 24, 36, 26, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 28, 48, 34, 0, 0, Math.PI * 2);
   ctx.fill();
   // Front feet
   ctx.fillStyle = dark;
   for (const side of [-1, 1]) {
     ctx.beginPath();
-    ctx.ellipse(side * 26, 52, 16, 8, 0, 0, Math.PI * 2);
+    ctx.ellipse(side * 32, 64, 18, 9, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -109,12 +111,22 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
     ctx.fill();
   }
   if (o.teacher) drawTeacherGear(ctx);
+  if (o.headband) {
+    ctx.fillStyle = '#e53935';
+    ctx.fillRect(-56, -40, 112, 12);
+    ctx.beginPath();
+    ctx.moveTo(52, -36);
+    ctx.lineTo(80, -48);
+    ctx.lineTo(78, -30);
+    ctx.lineTo(52, -32);
+    ctx.fill();
+  }
 
   // Cheeks
   ctx.fillStyle = 'rgba(255, 128, 160, 0.55)';
   for (const side of [-1, 1]) {
     ctx.beginPath();
-    ctx.ellipse(side * 34, -12, 9, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(side * 38, -12, 10, 7, 0, 0, Math.PI * 2);
     ctx.fill();
   }
   // Mouth
@@ -141,10 +153,10 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
     // Ice block around the frog
     ctx.save();
     ctx.globalAlpha = 0.45;
-    panel(ctx, x - 82 * s, y - 82 * s, 164 * s, 160 * s, 18 * s, '#d6f1ff', PALETTE.white, 4);
+    panel(ctx, x - 96 * s, y - 84 * s, 192 * s, 172 * s, 18 * s, '#d6f1ff', PALETTE.white, 4);
     ctx.restore();
-    emoji(ctx, '❄️', x - 62 * s, y - 64 * s, 30 * s);
-    emoji(ctx, '❄️', x + 64 * s, y + 40 * s, 24 * s);
+    emoji(ctx, '❄️', x - 74 * s, y - 66 * s, 30 * s);
+    emoji(ctx, '❄️', x + 76 * s, y + 46 * s, 24 * s);
   }
 }
 

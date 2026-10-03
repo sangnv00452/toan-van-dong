@@ -59,6 +59,10 @@ class FrozenAppleRound implements ChallengeRound {
     this.state = { kind: 'choose' };
   }
 
+  frog(): { x: number; y: number } {
+    return { x: this.frogX, y: this.frogY };
+  }
+
   update(dt: number, pointers: Pointer[]): void {
     this.time += dt;
     const s = this.state;
@@ -82,7 +86,8 @@ class FrozenAppleRound implements ChallengeRound {
         this.frozenCount++;
         this.cc.wrong(this.frogX, this.frogY - 110);
         this.cc.fx.burst(this.frogX, this.frogY, '#bfe9ff', 30);
-        this.cc.fx.float(this.frogX, this.frogY - 170, `Brrr! Táo đóng băng! Đáp án: ${this.q.answer}`, '#bfe9ff', 36);
+        const right = this.apples.find((a) => a.correct);
+        if (right) this.cc.fx.float(right.x, APPLE_Y - 100, `Đáp án: ${this.q.answer}`, PALETTE.yellow, 36);
       }
     } else if (s.kind === 'result') {
       const wait = s.apple.correct ? 0.9 : FREEZE_TIME;

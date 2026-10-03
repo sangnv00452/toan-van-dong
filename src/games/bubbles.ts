@@ -1,6 +1,5 @@
 import { H, PALETTE } from '../config';
 import { text } from '../core/draw';
-import { drawFrog } from '../core/frog-art';
 import type { Pointer } from '../core/input';
 import { arithmeticQuestion, type ChoiceQuestion } from '../math/arithmetic';
 import { randInt, shuffle } from '../math/random';
@@ -37,6 +36,7 @@ class BubblesRound extends BaseRound {
 
   private next(): void {
     this.q = arithmeticQuestion(this.rc.level);
+    this.buddy.puff();
     const r = this.region;
     const slots = shuffle([0, 1, 2]);
     const colors = shuffle(COLORS);
@@ -102,7 +102,7 @@ class BubblesRound extends BaseRound {
       text(ctx, String(b.value), b.x, b.y + 2, { size: this.radius * 0.72, outline: PALETTE.ink });
     }
     const r = this.region;
-    drawFrog(ctx, r.x + 90, H - 70, 0.7, { mood: 'eat', look: 0.6 });
+    this.buddy.draw(ctx, r.x + 90, H - 70, 0.7);
     this.banner(ctx, this.q.text);
   }
 }

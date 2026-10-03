@@ -1,5 +1,6 @@
 import { contains, PALETTE, type Rect } from '../config';
 import { emoji, panel, text, value } from '../core/draw';
+import { drawLilyPad } from '../core/frog-art';
 import type { Pointer } from '../core/input';
 import { compareQuestion, type CompareQuestion } from '../math/compare';
 import { BaseRound, TouchTracker } from './round-kit';
@@ -67,6 +68,8 @@ class CompareRound extends BaseRound {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
+    drawLilyPad(ctx, this.cx, 655, 110);
+    this.buddy.draw(ctx, this.cx, 600, 0.8);
     this.banner(ctx, 'Lá sen nào LỚN HƠN? Giơ tay chạm vào bên đó!');
     for (const s of this.sides) {
       const { x, y, w, h } = s.rect;
