@@ -52,5 +52,7 @@ Mỗi trò có 3 mức **Dễ, Vừa, Khó**, mỗi mức có **5 màn**. Chọn
 
 ## Điểm kinh nghiệm (KN) và hạng
 - Mỗi câu đúng được **10 KN**, ở cả phần Học lẫn phần Luyện tập. Qua một màn Math Frog được thêm **20 KN**.
+- Ở phần Học, mỗi câu bài tập **sai bị trừ 5 KN** (KN không xuống dưới 0).
+- Green **lớn lên theo hạng**: hạng càng cao ếch càng to, tụt hạng thì ếch bé lại. Ở hạng Nòng nọc, Green là **con nòng nọc**; đủ 100 KN thì hóa thành ếch. Mỗi lần đổi hạng có hiệu ứng biến hình và Green nói ra điều đó. (Trong 3 trò camera, Green vẫn giữ hình ếch để còn nhảy và thè lưỡi.)
 - Hạng: 💧 Nòng nọc (0) → 🌱 Ếch con (100) → 🍀 Ếch xanh (300) → 🥈 Ếch bạc (600) → 🥇 Ếch vàng (1000) → 👑 Vua ếch (1600 KN). Muốn đổi tên hạng thì sửa trong `src/core/progress.ts`.
 - KN, các màn đã qua và các chủ đề đã học chỉ được lưu **trên máy tính đang dùng**, không gửi đi đâu.
