@@ -10,7 +10,7 @@
 6. **Đề toán không bao giờ hết:** máy chọn số **ngẫu nhiên** rồi tự tính đáp án. Đáp án sai là những lỗi hay gặp, ví dụ đặt nhầm dấu phẩy.
 7. **Màn hình trôi ở trò Nhảy Lá Sen:** mỗi khoảnh khắc, mặt hồ dịch sang trái một chút. Màn càng cao thì hồ trôi càng nhanh, nên phải tính nhanh hơn.
 8. **Kinh nghiệm và hạng:** mỗi câu đúng được 10 KN. Máy cộng KN lại rồi so với các mốc 100, 300, 600… để biết em đang ở hạng nào.
-9. **Nhạc nền:** máy tự chơi từng nốt nhạc bằng cách tạo ra âm thanh, nên không cần file nhạc và không cần mạng.
+9. **Nhạc nền và tiếng ếch:** máy tự tạo ra từng nốt nhạc và tiếng "ộp ộp", nên không cần file âm thanh và không cần mạng. Lời khen khi đúng và câu "Đói quá!" khi sai do giọng đọc tiếng Việt có sẵn trong máy tính đọc lên.
 10. **An toàn – công dân số:** hình ảnh chỉ được xử lý **ngay trên máy tính này**, không chụp, không lưu, không gửi lên mạng. KN cũng chỉ lưu trên máy này.
 
 ## Giải thích kỹ thuật (cho người lớn và giám khảo)
@@ -25,8 +25,10 @@
 | 3 trò Math Frog | Mỗi màn là một thử thách (số câu đúng cần đạt, thời gian, tốc độ trôi) | `src/games/frog/` |
 | Đề toán lớp 5 | Hàm thuần; tính bằng số nguyên (phần mười, phần trăm, phần nghìn) để tránh sai số của số thập phân | `src/math/grade5.ts` |
 | Kiểm tra đáp án nhập | Chấp nhận "2,5", "2.5", "2,50" | `src/math/answer-check.ts` |
-| Bài học | Nội dung 4 chương là dữ liệu, sửa được mà không cần sửa code | `src/data/lessons.ts` |
+| Bài học | Nội dung 4 chương là dữ liệu, sửa được mà không cần sửa code; mỗi trang lý thuyết có hình động vẽ bằng Canvas | `src/data/lessons.ts`, `src/scenes/lesson-art.ts` |
 | KN, hạng, màn đã qua | `localStorage` của trình duyệt | `src/core/progress.ts` |
-| Âm thanh, nhạc nền | Tạo bằng Web Audio (C – Am – F – G, có tiếng vang nhẹ), không cần file âm thanh | `src/core/audio.ts`, `src/core/music.ts` |
+| Âm thanh, nhạc nền | Tạo bằng Web Audio (C – Am – F – G, có tiếng vang nhẹ; tiếng ếch là sóng răng cưa bị "băm" 38 lần mỗi giây), không cần file âm thanh | `src/core/audio.ts`, `src/core/music.ts` |
+| Giọng nói của ếch | Web Speech API, ưu tiên giọng tiếng Việt cài sẵn trong máy; lời khen cách nhau ít nhất 1,5 giây; không có giọng thì kêu ộp | `src/core/voice.ts` |
+| Ếch trong 9 trò cũ | `FrogBuddy`: nhảy khi đúng, buồn khi sai, há miệng, thè lưỡi | `src/games/frog-buddy.ts`, `src/games/round-kit.ts` |
 | Kiểm thử | Vitest: đề toán luôn đúng, đáp án sai không trùng nhau, nội dung bài học hợp lệ, lưu và tải lại KN | `tests/` |
 | Chạy khi không có mạng | Thư viện WebAssembly và mô hình nhận diện tay (khoảng 7,5 MB) được chép vào `public/mediapipe/` khi build | `scripts/vendor-mediapipe.mjs` |

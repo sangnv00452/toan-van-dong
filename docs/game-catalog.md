@@ -3,10 +3,10 @@
 Ý tưởng do hai bạn trong đội mô tả: [game-ideas/01-math-frog.md](./game-ideas/01-math-frog.md).
 
 ## Trang chủ
-Một cái hồ, ếch Green ngồi trên lá sen, có nhạc nền nhẹ (nút bật/tắt). Góc trên bên trái hiện **hạng** và **điểm kinh nghiệm (KN)**. Góc bên phải có hai phần **Luyện tập** và **Học**.
+Một cái hồ, ếch Green ngồi trên lá sen, có nhạc nền nhẹ (nút bật/tắt). Góc trên bên trái hiện **hạng** và **điểm kinh nghiệm (KN)**. Góc bên phải có hai phần **Luyện tập** và **Học**. Chạm vào ếch Green (bằng chuột hoặc bằng tay) thì ếch kêu **ộp ộp**.
 
 ## Phần Học (không cần camera)
-Ếch thầy giáo giảng lý thuyết → ví dụ giải từng bước → bài tập **nhập đáp án** (gõ bằng bàn phím, bấm chuột, hoặc giữ tay trên bàn phím số trên màn hình). Làm xong chủ đề thì được KN.
+Ếch thầy giáo giảng lý thuyết (mỗi trang lý thuyết có **hình minh họa chuyển động**, ví dụ dấu phẩy nhảy khi nhân với 10, bánh xe lăn ra chu vi, khối lập phương xếp từng lớp) → ví dụ giải từng bước → bài tập **nhập đáp án** (gõ bằng bàn phím, bấm chuột, hoặc giữ tay trên bàn phím số trên màn hình). Làm xong chủ đề thì được KN.
 
 | Chương | Chủ đề |
 |---|---|
@@ -19,7 +19,7 @@ Nội dung nằm trong `src/data/lessons.ts`. Hai bạn sửa hoặc thêm câu 
 
 ## Phần Luyện tập (dùng camera)
 ### 3 trò Math Frog
-Mỗi trò có 3 mức **Dễ, Vừa, Khó**, mỗi mức có **5 màn**. Qua màn này mới mở màn sau. Màn 1–4 luyện mỗi màn một dạng toán, màn 5 trộn cả 4 dạng.
+Mỗi trò có 3 mức **Dễ, Vừa, Khó**, mỗi mức có **5 màn**. Chọn đúng thì ếch khen ("Ngon quá!", "Giỏi lắm!"…), chọn sai thì ếch nói **"Đói quá!"**. Máy không có giọng đọc tiếng Việt thì ếch kêu "ộp" vui hoặc buồn thay cho lời nói. Qua màn này mới mở màn sau. Màn 1–4 luyện mỗi màn một dạng toán, màn 5 trộn cả 4 dạng.
 
 | Trò | Cách chơi | Thử thách mỗi màn |
 |---|---|---|
@@ -36,7 +36,7 @@ Mỗi trò có 3 mức **Dễ, Vừa, Khó**, mỗi mức có **5 màn**. Qua m�
 Đề do máy tạo ngẫu nhiên (`src/math/grade5.ts`). Đáp án sai là những lỗi hay gặp, ví dụ đặt sai dấu phẩy, quên chia 2 khi tính diện tích tam giác.
 
 ### 9 trò chơi khác của Green
-Đây là 9 trò cũ, đã đổi sang chủ đề ếch. Mỗi trò có 3 mức. Trò 1, 2, 3, 5, 6 chơi được **2 người đấu** (chia đôi màn hình).
+Đây là 9 trò cũ, đã đổi sang chủ đề ếch. Trò nào cũng có ếch Green: nhảy lên khi đúng, buồn khi sai, khen bằng giọng nói. Ếch thổi bong bóng, thè lưỡi bắt bọ rùa, đeo băng đô ninja, làm thủ môn nhảy ra chặn bóng, đội mũ thầy giáo hỏi giờ, xách giỏ đi chợ, leo bậc thang, đứng xem cân. Mỗi trò có 3 mức. Trò 1, 2, 3, 5, 6 chơi được **2 người đấu** (chia đôi màn hình).
 
 | # | Trò | Dạng toán (Dễ · Vừa · Khó) |
 |---|---|---|
