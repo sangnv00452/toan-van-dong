@@ -1,0 +1,25 @@
+{
+  "name": "toan-van-dong",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.0.1"
+  },
+  "scripts": {
+    "predev": "node scripts/vendor-mediapipe.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/vendor-mediapipe.mjs",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "offline": "npm run build && vite preview --open",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "vendor": "node scripts/vendor-mediapipe.mjs"
+  }
+}

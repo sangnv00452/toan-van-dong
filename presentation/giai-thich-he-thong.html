@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toán Vận Động hoạt động thế nào?</title>
+<style>
+  :root {
+    --bg: #f7f9ff;
+    --card: #ffffff;
+    --ink: #1d2b4f;
+    --muted: #56607a;
+    --line: #dfe6f3;
+    --blue: #3b6fd8;
+    --yellow: #ffd23f;
+    --green: #1fa35b;
+    --say-bg: #fff6d6;
+    --say-line: #f2c94c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+  header {
+    background: linear-gradient(135deg, #3b6fd8, #6a5ae0);
+    color: #fff;
+    padding: 36px 16px 28px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: clamp(26px, 5vw, 40px); }
+  header p { margin: 0; font-size: 18px; opacity: 0.95; }
+  nav {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin-top: 18px;
+  }
+  nav a {
+    color: #fff; text-decoration: none; font-weight: 700; font-size: 15px;
+    background: rgba(255, 255, 255, 0.18); border-radius: 999px; padding: 6px 14px;
+  }
+  nav a:hover { background: rgba(255, 255, 255, 0.3); }
+  main { max-width: 1120px; margin: 0 auto; padding: 8px 16px 48px; }
+  h2.part {
+    margin: 40px 0 6px; font-size: 26px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .part-note { margin: 0 0 18px; color: var(--muted); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 18px;
+    margin: 18px 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    box-shadow: 0 4px 16px rgba(29, 43, 79, 0.06);
+  }
+  .stage { position: relative; }
+  .stage canvas {
+    display: block; width: 100%; aspect-ratio: 16 / 9;
+    border-radius: 14px; background: #eef3fb; cursor: pointer;
+  }
+  .controls { display: flex; gap: 8px; margin-top: 8px; }
+  .controls button {
+    font: inherit; font-size: 15px; font-weight: 700;
+    border: 1px solid var(--line); background: #f3f6fc; color: var(--ink);
+    border-radius: 10px; padding: 4px 12px; cursor: pointer;
+  }
+  .controls button:hover { background: #e6ecf8; }
+  .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--yellow); color: var(--ink); font-weight: 800; font-size: 17px;
+    flex: none;
+  }
+  .card h3 { margin: 0 0 8px; font-size: 22px; display: flex; gap: 10px; align-items: center; }
+  .card p { margin: 0 0 10px; }
+  .say {
+    background: var(--say-bg); border-left: 5px solid var(--say-line);
+    border-radius: 10px; padding: 10px 12px; margin-top: 12px; font-size: 17px;
+  }
+  .say b { display: block; font-size: 14px; color: #8a6500; margin-bottom: 2px; }
+  .words {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px; margin-top: 14px;
+  }
+  .word {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
+  }
+  .word b { display: block; font-size: 18px; color: var(--blue); }
+  footer { text-align: center; color: var(--muted); font-size: 15px; padding: 0 16px 32px; }
+  @media (max-width: 820px) {
+    .card { grid-template-columns: 1fr; padding: 14px; gap: 12px; }
+    body { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Toán Vận Động hoạt động thế nào?</h1>
+  <p>Giải thích bằng hình động cho các bạn lớp 5</p>
+  <nav>
+    <a href="#phan-1">1. Máy nhìn thấy em</a>
+    <a href="#phan-2">2. Luật chơi bên trong máy</a>
+    <a href="#phan-3">3. An toàn và tiện lợi</a>
+    <a href="#tu-khoa">Từ khóa cần nhớ</a>
+  </nav>
+</header>
+
+<main>
+  <h2 class="part" id="phan-1">👀 Phần 1: Máy nhìn thấy em như thế nào?</h2>
+  <p class="part-note">Bấm vào hình để dừng hoặc chạy tiếp. Bấm “Xem lại” để xem từ đầu.</p>
+
+  <section class="card" data-scene="pipeline">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">1</span>Cả hệ thống trong 5 bước</h3>
+      <p>Camera chụp ảnh → <b>AI</b> tìm bàn tay → máy lấy đầu ngón trỏ làm <b>chấm vàng</b> → trò chơi xem chấm vàng chạm vào đâu → cộng điểm và phát tiếng.</p>
+      <p>Năm bước này lặp lại liên tục và rất nhanh, nên em thấy chấm vàng luôn đi theo tay mình.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Máy nhìn bằng camera, hiểu bằng AI, rồi trò chơi kiểm tra xem em chạm đúng chưa.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="frames">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">2</span>Video là nhiều tấm ảnh</h3>
+      <p>Camera không quay “một hình liền”. Nó chụp rất nhiều ảnh liên tiếp, <b>khoảng 30 ảnh mỗi giây</b>. Mỗi ảnh gọi là một <b>khung hình</b>.</p>
+      <p>Ảnh đổi nhanh quá nên mắt mình thấy như đang chuyển động. Hình động ở đây chiếu chậm lại để em đếm được.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Mỗi giây camera chụp khoảng 30 ảnh, máy tìm ngón tay trong từng ảnh.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="mirror">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">3</span>Màn hình như tấm gương</h3>
+      <p>Ảnh gốc của camera bị <b>ngược</b>: em giơ tay phải, trên màn hình lại thấy tay ở bên trái.</p>
+      <p>Website <b>lật ảnh lại như soi gương</b>, nên em giơ tay bên nào thì hình cũng ở bên đó. Chơi dễ hơn hẳn.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Chúng em lật hình như soi gương, nên tay đi đâu thì chấm vàng đi theo đúng chỗ đó.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="hand21">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">4</span>AI tìm 21 điểm trên bàn tay</h3>
+      <p><b>Trí tuệ nhân tạo (AI)</b> là chương trình máy tính đã được “dạy” bằng rất nhiều ví dụ.</p>
+      <p>AI tên <b>MediaPipe</b> của Google đã xem rất nhiều ảnh bàn tay. Vì vậy, nhìn ảnh mới là nó tìm được <b>21 điểm mốc</b>: cổ tay và các đốt ngón. Nó tìm được cùng lúc tối đa 4 bàn tay.</p>
+      <p>Trò chơi chỉ dùng <b>điểm số 8</b>, là đầu ngón trỏ.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“AI tìm 21 điểm trên bàn tay, chúng em chỉ dùng điểm số 8 là đầu ngón trỏ.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="coords">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">5</span>Tọa độ: vị trí bằng hai con số</h3>
+      <p>Màn hình trò chơi giống một tờ giấy kẻ ô, rộng <b>1280</b> và cao <b>720</b>.</p>
+      <p>Vị trí chấm vàng được ghi bằng 2 số: số <b>ngang</b> (đếm từ trái sang) và số <b>dọc</b> (đếm từ trên xuống). Hai số này gọi là <b>tọa độ</b>.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Máy không nhìn như mình. Nó biết ngón tay ở đâu nhờ hai con số.”</div>
+    </div>
+  </section>
+
+  <h2 class="part" id="phan-2">🎮 Phần 2: Luật chơi bên trong máy</h2>
+  <p class="part-note">Máy tính không tự hiểu “chạm” hay “chém”. Người làm trò chơi phải dạy máy bằng những luật rõ ràng.</p>
+
+  <section class="card" data-scene="touch">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">6</span>Chạm là “đi vào”</h3>
+      <p>Chấm vàng vừa <b>đi vào</b> bên trong quả bóng thì tính là chạm, cộng 1 lần.</p>
+      <p>Để yên tay bên trong thì <b>không</b> tính thêm. Muốn chạm lại thì phải rút tay ra rồi đưa vào lại.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Chỉ tính lúc ngón tay đi vào, nên để tay yên một chỗ thì không bị tính nhiều lần.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="slash">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">7</span>Chém là phải vung nhanh</h3>
+      <p>Ở trò <b>Ninja Chém Phân Số</b>, máy đo <b>vận tốc</b> của ngón tay: mỗi giây ngón tay đi được bao nhiêu điểm ảnh.</p>
+      <p><b>Vận tốc = quãng đường : thời gian</b>, giống bài toán chuyển động lớp 5. Đi chậm qua quả thì không sao. Vung nhanh hơn <b>650 điểm ảnh mỗi giây</b> mới là chém.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Máy lấy quãng đường chia cho thời gian để tính vận tốc. Đủ nhanh mới chém được.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="dwell">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">8</span>Bấm nút không cần chạm máy</h3>
+      <p>Giữ chấm vàng yên trên nút <b>khoảng 1 giây</b> (chính xác là 0,9 giây). Thanh vàng chạy đầy là nút được bấm.</p>
+      <p>Nếu tay chỉ đi ngang qua, thanh vàng chưa kịp đầy đã tụt về, nên không bị bấm nhầm.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Muốn bấm nút thì giữ tay yên khoảng 1 giây, đứng xa vẫn bấm được.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="random">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">9</span>Số ngẫu nhiên: đề không bao giờ hết</h3>
+      <p><b>Ngẫu nhiên</b> nghĩa là chọn mà không ai đoán trước được, giống như gieo xúc xắc.</p>
+      <p>Máy chọn số ngẫu nhiên, <b>tự tính đáp án đúng</b>, rồi tạo thêm vài đáp án sai không trùng nhau. Mỗi lần chơi lại có đề mới. Các bài kiểm tra tự động giúp chắc chắn đáp án đúng luôn có trong các lựa chọn.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Máy tự ra đề và tự tính đáp án, nên chơi mãi không hết đề.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="gravity">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">10</span>Trọng lực: quả bay cong</h3>
+      <p>Trái cây được tung lên. Mỗi khoảnh khắc, <b>trọng lực</b> kéo nó xuống thêm một chút.</p>
+      <p>Vì vậy quả bay lên chậm dần, dừng lại ở đỉnh, rồi rơi xuống nhanh dần. Nhìn các chấm mờ: ở đỉnh chúng sát nhau (đi chậm), ở dưới cách xa nhau (đi nhanh).</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Quả bay cong giống hệt khi em tung quả bóng lên trời.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="loop">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">11</span>Vòng lặp trò chơi</h3>
+      <p>Trò chơi làm đi làm lại 4 việc: lấy ảnh, tìm ngón tay, kiểm tra và tính điểm, vẽ màn hình.</p>
+      <p>Làm xong 4 việc là một <b>vòng lặp</b>. Máy chạy <b>khoảng 60 vòng mỗi giây</b> (tùy màn hình), nên hình chuyển động mượt.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Máy tính làm 4 việc này khoảng 60 lần mỗi giây.”</div>
+    </div>
+  </section>
+
+  <h2 class="part" id="phan-3">🛡️ Phần 3: An toàn và tiện lợi</h2>
+  <p class="part-note">Dùng camera thì phải biết giữ an toàn cho bạn mình.</p>
+
+  <section class="card" data-scene="privacy">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">12</span>Hình ảnh không rời khỏi máy</h3>
+      <p>Ảnh từ camera chỉ dùng để tìm ngón tay <b>ngay trên máy tính này</b>.</p>
+      <p>Không chụp lưu lại, không gửi lên mạng. Tắt trang web là camera tắt. Đó là cách dùng công nghệ an toàn của một <b>công dân số</b>.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Camera không chụp, không lưu, không gửi hình đi đâu cả.”</div>
+    </div>
+  </section>
+
+  <section class="card" data-scene="offline">
+    <div class="stage"><canvas></canvas></div>
+    <div>
+      <h3><span class="num">13</span>Không cần mạng vẫn chơi được</h3>
+      <p>AI nhận diện tay (khoảng 7,5 MB) và cả 9 trò chơi đã được <b>chép sẵn vào máy</b>. Mất mạng vẫn chơi bình thường.</p>
+      <p>Không có camera thì chơi bằng chuột.</p>
+      <div class="say"><b>💬 Em nói với giám khảo</b>“Ở lớp không có Internet vẫn chơi được, không cần mua thêm thiết bị.”</div>
+    </div>
+  </section>
+
+  <h2 class="part" id="tu-khoa">📚 Từ khóa cần nhớ</h2>
+  <div class="words">
+    <div class="word"><b>Khung hình</b>Một tấm ảnh trong video. Camera chụp khoảng 30 khung hình mỗi giây.</div>
+    <div class="word"><b>Trí tuệ nhân tạo (AI)</b>Chương trình máy tính học từ rất nhiều ví dụ để tự nhận ra đồ vật.</div>
+    <div class="word"><b>MediaPipe</b>Tên AI của Google mà trò chơi dùng để tìm bàn tay.</div>
+    <div class="word"><b>Điểm mốc</b>21 điểm AI tìm trên bàn tay. Điểm số 8 là đầu ngón trỏ.</div>
+    <div class="word"><b>Tọa độ</b>Hai con số (ngang, dọc) cho biết một điểm nằm ở đâu.</div>
+    <div class="word"><b>Vận tốc</b>Quãng đường chia cho thời gian. Dùng để biết em vung tay nhanh hay chậm.</div>
+    <div class="word"><b>Ngẫu nhiên</b>Chọn mà không đoán trước được, như gieo xúc xắc.</div>
+    <div class="word"><b>Trọng lực</b>Sức kéo mọi vật rơi xuống đất.</div>
+    <div class="word"><b>Vòng lặp</b>Một nhóm việc máy làm đi làm lại liên tục.</div>
+    <div class="word"><b>Ngoại tuyến (offline)</b>Chạy được khi không có mạng Internet.</div>
+    <div class="word"><b>Công dân số</b>Người dùng công nghệ an toàn, lịch sự và có trách nhiệm.</div>
+  </div>
+</main>
+<footer>Toán Vận Động · Cuộc thi Sản phẩm STEM 2026 · TH Đô thị Sài Đồng</footer>
+
+<script>
+'use strict';
+// Every scene draws on a 480×270 logical canvas, scaled to the card width.
+const W = 480, H = 270;
+const FONT = '"Segoe UI", Arial, sans-serif';
+const EMOJI_FONT = '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
+
+// ---------- drawing helpers ----------
+const lerp = (a, b, u) => a + (b - a) * u;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const ease = (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
+
+/** Position along keyframes [[time, x, y], ...] with ease-in-out between them. */
+function kf(keys, t) {
+  if (t <= keys[0][0]) return [keys[0][1], keys[0][2]];
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, x1, y1] = keys[i];
+    if (t <= t1) {
+      const [t0, x0, y0] = keys[i - 1];
+      const u = ease((t - t0) / (t1 - t0));
+      return [lerp(x0, x1, u), lerp(y0, y1, u)];
+    }
+  }
+  const last = keys[keys.length - 1];
+  return [last[1], last[2]];
+}
+
+function shuffle(list) {
+  const a = list.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function bg(c, color) { c.fillStyle = color; c.fillRect(0, 0, W, H); }
+
+function rr(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
+function line(c, x1, y1, x2, y2) { c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke(); }
+
+function txt(c, s, x, y, o = {}) {
+  c.font = `${o.w || 700} ${o.size || 14}px ${FONT}`;
+  c.fillStyle = o.color || '#1d2b4f';
+  c.textAlign = o.align || 'center';
+  c.textBaseline = 'middle';
+  c.fillText(s, x, y);
+}
+
+/** Text on a rounded background. */
+function pill(c, s, x, y, o = {}) {
+  c.font = `${o.w || 700} ${o.size || 13}px ${FONT}`;
+  const w = c.measureText(s).width + 18, h = (o.size || 13) + 12;
+  const left = o.align === 'left' ? x : o.align === 'right' ? x - w : x - w / 2;
+  rr(c, left, y - h / 2, w, h, h / 2);
+  c.fillStyle = o.bg || '#ffffff'; c.fill();
+  if (o.border) { c.strokeStyle = o.border; c.lineWidth = 1.5; c.stroke(); }
+  txt(c, s, left + w / 2, y, { ...o, align: 'center' });
+}
+
+function emoji(c, e, x, y, size) {
+  c.font = `${size}px ${EMOJI_FONT}`;
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.fillStyle = '#000';
+  c.fillText(e, x, y);
+}
+
+/** The yellow fingertip dot, same idea as in the game. */
+function tip(c, x, y, s = 1) {
+  c.beginPath(); c.arc(x, y, 15 * s, 0, Math.PI * 2);
+  c.fillStyle = 'rgba(255, 210, 63, 0.35)'; c.fill();
+  c.beginPath(); c.arc(x, y, 8 * s, 0, Math.PI * 2);
+  c.fillStyle = '#ffd23f'; c.fill();
+  c.lineWidth = 2 * s; c.strokeStyle = '#a87900'; c.stroke();
+}
+
+function arrow(c, x1, y1, x2, y2, color, w = 3) {
+  const a = Math.atan2(y2 - y1, x2 - x1), head = 6 + w * 1.5;
+  c.strokeStyle = color; c.fillStyle = color; c.lineWidth = w; c.lineCap = 'round';
+  line(c, x1, y1, x2 - Math.cos(a) * head * 0.8, y2 - Math.sin(a) * head * 0.8);
+  c.beginPath();
+  c.moveTo(x2, y2);
+  c.lineTo(x2 - Math.cos(a - 0.45) * head, y2 - Math.sin(a - 0.45) * head);
+  c.lineTo(x2 - Math.cos(a + 0.45) * head, y2 - Math.sin(a + 0.45) * head);
+  c.closePath(); c.fill();
+}
+
+/** A simple child figure. d = +1 raises the arm on the viewer's right. Returns the raised hand position. */
+function person(c, x, y, s, d, o = {}) {
+  c.save(); c.translate(x, y); c.scale(s, s);
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  c.strokeStyle = '#2c3e66'; c.lineWidth = 10;
+  line(c, 0, 62, -12, 96); line(c, 0, 62, 12, 96);
+  c.strokeStyle = o.shirt || '#3b6fd8'; c.lineWidth = 16;
+  line(c, 0, 22, 0, 62);
+  c.lineWidth = 8;
+  const hx = d * 30 + (o.wave || 0), hy = -26;
+  c.beginPath(); c.moveTo(0, 28); c.lineTo(d * 22, 8); c.lineTo(hx, hy); c.stroke();
+  c.beginPath(); c.moveTo(0, 28); c.lineTo(-d * 16, 46); c.lineTo(-d * 20, 64); c.stroke();
+  c.beginPath(); c.arc(0, 0, 15, 0, Math.PI * 2);
+  c.fillStyle = o.back ? '#3a2a1a' : '#ffcf9e'; c.fill();
+  if (!o.back) {
+    c.beginPath(); c.arc(0, -3, 15, Math.PI, 0); c.fillStyle = '#3a2a1a'; c.fill();
+    c.fillStyle = '#1d2b4f';
+    c.beginPath(); c.arc(-5, 3, 1.8, 0, Math.PI * 2); c.arc(5, 3, 1.8, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = '#b04a2f'; c.lineWidth = 1.6;
+    c.beginPath(); c.arc(0, 6, 5, 0.2, Math.PI - 0.2); c.stroke();
+  }
+  c.beginPath(); c.arc(hx, hy, 6, 0, Math.PI * 2); c.fillStyle = '#ffcf9e'; c.fill();
+  c.restore();
+  return { x: x + hx * s, y: y + hy * s };
+}
+
+// ---------- scenes ----------
+// Each scene: { cycle?: seconds, init?: () => state, draw(ctx, t, dt, state, elapsed) }.
+// With a cycle, t restarts from 0 and state is rebuilt every cycle.
+
+// 21 hand landmarks (open right hand), in the order MediaPipe numbers them.
+const HAND = [[180, 222], [140, 202], [112, 177], [95, 152], [82, 130], [152, 142], [145, 102], [140, 77], [136, 54],
+  [180, 137], [180, 94], [180, 67], [180, 42], [206, 142], [212, 102], [216, 77], [219, 56], [230, 154], [242, 124], [250, 104], [256, 86]];
+const BONES = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [5, 9], [9, 10], [10, 11], [11, 12],
+  [9, 13], [13, 14], [14, 15], [15, 16], [13, 17], [0, 17], [17, 18], [18, 19], [19, 20]];
+
+const SCENES = {
+  pipeline: {
+    cycle: 6,
+    draw(c, t) {
+      bg(c, '#eef5ff');
+      txt(c, 'Mỗi khoảnh khắc, máy làm 5 bước này', W / 2, 24, { size: 15, color: '#3b4a6b' });
+      const steps = [['📷', 'Camera', 'chụp ảnh'], ['🧠', 'AI', 'tìm bàn tay'], ['🟡', 'Chấm vàng', 'đầu ngón trỏ'],
+        ['🎯', 'Kiểm tra', 'chạm đúng chưa?'], ['🎉', 'Kết quả', 'điểm + tiếng']];
+      const bw = 78, gap = (W - 5 * bw) / 6, y = 52, bh = 118;
+      const p = Math.min(5, t);
+      const cx = (i) => gap + i * (bw + gap) + bw / 2;
+      steps.forEach(([e, name, sub], i) => {
+        const x = gap + i * (bw + gap);
+        const active = p >= i && p < i + 1, done = p >= i + 1;
+        rr(c, x, y, bw, bh, 14);
+        c.fillStyle = active ? '#ffe27a' : done ? '#d8ecff' : '#ffffff'; c.fill();
+        c.lineWidth = active ? 3 : 2; c.strokeStyle = active ? '#e0a800' : '#8fb3ef'; c.stroke();
+        const bounce = active ? Math.sin((p - i) * Math.PI) * 7 : 0;
+        emoji(c, e, x + bw / 2, y + 38 - bounce, 30);
+        txt(c, name, x + bw / 2, y + 78, { size: 13 });
+        txt(c, sub, x + bw / 2, y + 98, { size: 10.5, w: 600, color: '#5a6785' });
+        if (i < 4) arrow(c, x + bw + 2, y + bh / 2, x + bw + gap - 2, y + bh / 2, '#8fb3ef', 2);
+      });
+      const ty = 206;
+      c.strokeStyle = '#c9d8f2'; c.lineWidth = 4; c.lineCap = 'round';
+      line(c, cx(0), ty, cx(4), ty);
+      tip(c, lerp(cx(0), cx(4), clamp((p - 0.5) / 4, 0, 1)), ty);
+      txt(c, t < 5 ? `Đang làm bước ${Math.floor(p) + 1}` : 'Xong! Rồi lại làm từ đầu…', W / 2, 246, { size: 14, color: '#3b4a6b' });
+    },
+  },
+
+  frames: {
+    draw(c, t, dt, s, el) {
+      bg(c, '#f6f1ff');
+      const shownFps = 4;
+      const pos = el * shownFps;
+      const cur = Math.max(0, Math.round(pos));
+      const drawFrame = (k, x, y, w, h) => {
+        c.save(); rr(c, x, y, w, h, 4); c.clip();
+        c.fillStyle = '#cfe3ff'; c.fillRect(x, y, w, h);
+        c.fillStyle = '#b8e0b0'; c.fillRect(x, y + h * 0.8, w, h * 0.2);
+        const hx = x + w * (0.5 + 0.3 * Math.sin(k * 0.55)), hy = y + h * (0.42 + 0.16 * Math.cos(k * 0.55));
+        c.strokeStyle = '#ffcf9e'; c.lineWidth = h * 0.09; c.lineCap = 'round';
+        line(c, x + w * 0.5, y + h, hx, hy);
+        tip(c, hx, hy, h / 120);
+        c.restore();
+      };
+      // big viewer
+      rr(c, 140, 14, 200, 120, 10); c.fillStyle = '#2b2540'; c.fill();
+      drawFrame(cur, 148, 22, 184, 104);
+      pill(c, `Ảnh số ${cur + 1}`, 240, 146, { size: 13, bg: '#ffe27a' });
+      txt(c, 'Chiếu chậm:', 70, 50, { size: 12, color: '#56607a' });
+      txt(c, `${shownFps} ảnh/giây`, 70, 70, { size: 15 });
+      txt(c, 'Camera thật:', 410, 50, { size: 12, color: '#56607a' });
+      txt(c, '~30 ảnh/giây', 410, 70, { size: 15 });
+      txt(c, 'Đã chụp thật:', 410, 102, { size: 12, color: '#56607a' });
+      txt(c, `${Math.floor(el * 30)} ảnh`, 410, 122, { size: 15, color: '#6a5ae0' });
+      // film strip
+      const fw = 56, fh = 40, step = fw + 10, sy = 194;
+      c.fillStyle = '#2b2540'; c.fillRect(0, sy - 14, W, fh + 28);
+      c.fillStyle = '#f6f1ff';
+      const off = (pos * step) % 16;
+      for (let x = -off; x < W; x += 16) { c.fillRect(x, sy - 10, 8, 5); c.fillRect(x, sy + fh + 5, 8, 5); }
+      for (let k = Math.floor(pos) - 5; k <= Math.ceil(pos) + 5; k++) {
+        if (k < 0) continue;
+        const x = W / 2 + (k - pos) * step - fw / 2;
+        drawFrame(k, x, sy, fw, fh);
+      }
+      c.strokeStyle = '#ffd23f'; c.lineWidth = 3;
+      rr(c, W / 2 - fw / 2 - 4, sy - 4, fw + 8, fh + 8, 6); c.stroke();
+      arrow(c, W / 2, 162, W / 2, 184, '#ffd23f', 3);
+    },
+  },
+
+  mirror: {
+    cycle: 7,
+    draw(c, t) {
+      bg(c, '#fff7ec');
+      const mir = t >= 3.5;
+      const wave = Math.sin(t * 5) * 4;
+      rr(c, 120, 10, 240, 152, 10); c.fillStyle = '#22304f'; c.fill();
+      rr(c, 128, 18, 224, 136, 6); c.fillStyle = mir ? '#d9f5e3' : '#ffe1e1'; c.fill();
+      txt(c, 'MÀN HÌNH', 240, 30, { size: 10, color: '#56607a' });
+      const onScreen = person(c, 240, 72, 0.72, mir ? 1 : -1, { wave: mir ? wave : -wave });
+      tip(c, onScreen.x, onScreen.y, 0.8);
+      const kid = person(c, 240, 190, 0.62, 1, { back: true, shirt: '#e8553d', wave });
+      tip(c, kid.x, kid.y, 0.8);
+      txt(c, 'tay phải', kid.x + 16, kid.y + 4, { size: 12, align: 'left', color: '#b04a2f' });
+      txt(c, 'Em', 105, 200, { size: 15 });
+      txt(c, '(nhìn từ phía sau)', 105, 220, { size: 11, w: 600, color: '#56607a' });
+      pill(c, mir ? 'Bước 2: Lật như gương' : 'Bước 1: Ảnh gốc của camera', 8, 252, { size: 12, align: 'left', bg: '#ffffff', border: '#e7d6bd' });
+      if (mir) {
+        txt(c, '✓ Cùng một bên', 420, 205, { size: 15, color: '#1fa35b' });
+        txt(c, 'dễ chơi!', 420, 226, { size: 13, color: '#1fa35b' });
+      } else {
+        txt(c, '✗ Bị ngược bên', 420, 205, { size: 15, color: '#d33b2c' });
+        txt(c, 'khó chơi', 420, 226, { size: 13, color: '#d33b2c' });
+      }
+      c.setLineDash([5, 5]); c.strokeStyle = mir ? '#1fa35b' : '#d33b2c'; c.lineWidth = 2;
+      line(c, kid.x, kid.y - 12, onScreen.x, onScreen.y + 12);
+      c.setLineDash([]);
+    },
+  },
+
+  hand21: {
+    cycle: 10,
+    draw(c, t) {
+      bg(c, '#f2f6ff');
+      const per = 0.28;
+      const shown = Math.min(21, Math.floor(t / per) + 1);
+      const highlight = t > 21 * per + 0.3;
+      // hand silhouette
+      c.lineCap = 'round'; c.lineJoin = 'round';
+      c.fillStyle = '#f3c9a0'; c.strokeStyle = '#f3c9a0'; c.lineWidth = 22;
+      c.beginPath();
+      [0, 1, 5, 9, 13, 17].forEach((i, k) => (k ? c.lineTo(...HAND[i]) : c.moveTo(...HAND[i])));
+      c.closePath(); c.fill(); c.stroke();
+      BONES.forEach(([a, b]) => line(c, ...HAND[a], ...HAND[b]));
+      // AI scan band
+      if (!highlight) {
+        const sy = 60 + ((t * 120) % 200);
+        const g = c.createLinearGradient(0, sy - 18, 0, sy + 18);
+        g.addColorStop(0, 'rgba(59,111,216,0)'); g.addColorStop(0.5, 'rgba(59,111,216,0.35)'); g.addColorStop(1, 'rgba(59,111,216,0)');
+        c.fillStyle = g; c.fillRect(40, sy - 18, 260, 36);
+      }
+      // skeleton
+      c.strokeStyle = '#3b6fd8'; c.lineWidth = 2.5;
+      BONES.forEach(([a, b]) => { if (a < shown && b < shown) line(c, ...HAND[a], ...HAND[b]); });
+      for (let i = 0; i < shown; i++) {
+        const [x, y] = HAND[i];
+        if (i === 8 && highlight) continue;
+        c.beginPath(); c.arc(x, y, 5, 0, Math.PI * 2);
+        c.fillStyle = '#ffffff'; c.fill(); c.lineWidth = 2; c.strokeStyle = '#3b6fd8'; c.stroke();
+        txt(c, String(i), x + (i <= 4 ? -11 : 11), y - 2, { size: 9.5, color: '#3b4a6b' });
+      }
+      const panelX = 380;
+      if (highlight) {
+        const pulse = 1 + 0.15 * Math.sin(t * 6);
+        tip(c, HAND[8][0], HAND[8][1], pulse);
+        txt(c, '8', HAND[8][0], HAND[8][1], { size: 10 });
+        arrow(c, 300, 70, HAND[8][0] + 18, HAND[8][1], '#e0a800', 3);
+        txt(c, 'Điểm số 8', panelX, 70, { size: 18, color: '#a87900' });
+        txt(c, '= đầu ngón trỏ', panelX, 94, { size: 14 });
+        txt(c, '= chấm vàng', panelX, 116, { size: 14 });
+        txt(c, 'trong trò chơi', panelX, 136, { size: 14 });
+        txt(c, 'Các điểm khác', panelX, 190, { size: 12, w: 600, color: '#56607a' });
+        txt(c, 'trò chơi không dùng', panelX, 208, { size: 12, w: 600, color: '#56607a' });
+      } else {
+        txt(c, 'AI đang tìm…', panelX, 60, { size: 15, color: '#3b6fd8' });
+        txt(c, `${shown}/21`, panelX, 112, { size: 44 });
+        txt(c, 'điểm mốc', panelX, 148, { size: 14, color: '#56607a' });
+      }
+      pill(c, 'MediaPipe: AI đã học rất nhiều ảnh bàn tay', W / 2, 258, { size: 12, bg: '#ffffff', border: '#cfdcf3' });
+    },
+  },
+
+  coords: {
+    draw(c, t, dt, s, el) {
+      bg(c, '#f2fbf6');
+      const gx = 44, gy = 24, gw = 400, k = gw / 1280, gh = 720 * k;
+      c.strokeStyle = '#d3e9dc'; c.lineWidth = 1;
+      for (let v = 0; v <= 1280; v += 160) line(c, gx + v * k, gy, gx + v * k, gy + gh);
+      for (let v = 0; v <= 720; v += 160) line(c, gx, gy + v * k, gx + gw, gy + v * k);
+      c.strokeStyle = '#7fb896'; c.lineWidth = 2; c.strokeRect(gx, gy, gw, gh);
+      txt(c, '0', gx - 8, gy - 10, { size: 11, color: '#3e7a56' });
+      txt(c, '1280', gx + gw, gy - 11, { size: 11, color: '#3e7a56' });
+      txt(c, '720', gx - 20, gy + gh, { size: 11, color: '#3e7a56' });
+      txt(c, 'ngang →', gx + gw / 2 + 120, gy - 11, { size: 11, color: '#3e7a56' });
+      txt(c, 'dọc ↓', gx - 22, gy + 14, { size: 11, color: '#3e7a56' });
+      const u = el * 0.5;
+      const X = Math.round(640 + 470 * Math.sin(u * 1.3));
+      const Y = Math.round(360 + 260 * Math.sin(u * 2.1 + 0.6));
+      const px = gx + X * k, py = gy + Y * k;
+      c.setLineDash([5, 4]); c.strokeStyle = '#1fa35b'; c.lineWidth = 2;
+      line(c, px, gy, px, py); line(c, gx, py, px, py);
+      c.setLineDash([]);
+      pill(c, String(X), px, gy - 11, { size: 11, bg: '#1fa35b', color: '#ffffff' });
+      pill(c, String(Y), gx - 2, py, { size: 11, bg: '#1fa35b', color: '#ffffff', align: 'right' });
+      tip(c, px, py);
+      pill(c, `Ngang: ${X}   ·   Dọc: ${Y}`, W / 2, 258, { size: 14, bg: '#ffffff', border: '#7fb896' });
+    },
+  },
+
+  touch: {
+    cycle: 11,
+    init: () => ({ inside: false, count: 0, flash: -9 }),
+    draw(c, t, dt, s) {
+      bg(c, '#eef9ff');
+      const bx = 300, by = 140, br = 46;
+      const K = [[0, 70, 222], [1.5, bx, by], [4, bx, by], [5.2, 420, 232], [6.5, 420, 232], [7.8, bx, by], [9.6, bx, by], [11, 70, 222]];
+      let [x, y] = kf(K, t);
+      if (t > 1.7 && t < 3.9) {
+        const w = Math.min(1, (t - 1.7) * 3, (3.9 - t) * 3);
+        x += Math.sin(t * 5) * 20 * w; y += Math.cos(t * 3.7) * 15 * w;
+      }
+      const inside = Math.hypot(x - bx, y - by) < br;
+      if (inside && !s.inside) { s.count++; s.flash = t; }
+      s.inside = inside;
+      txt(c, 'Câu hỏi: 3 × 4 = ?', bx, 34, { size: 17 });
+      const g = c.createRadialGradient(bx - 15, by - 15, 5, bx, by, br);
+      g.addColorStop(0, '#ffffff'); g.addColorStop(1, inside ? '#7fd4a0' : '#8cc8ff');
+      c.beginPath(); c.arc(bx, by, br, 0, Math.PI * 2); c.fillStyle = g; c.fill();
+      c.lineWidth = inside ? 4 : 2; c.strokeStyle = inside ? '#1fa35b' : '#3b8fd8'; c.stroke();
+      txt(c, '12', bx, by, { size: 26 });
+      pill(c, `Số lần chạm: ${s.count}`, 16, 34, { size: 15, align: 'left', bg: '#ffe27a' });
+      const since = t - s.flash;
+      if (since < 1) txt(c, 'Chạm! +1', bx, 74 - since * 26, { size: 20, color: `rgba(22,150,70,${1 - since})` });
+      tip(c, x, y);
+      const msg = t < 1.5 ? 'Ngón tay đi tới quả bóng…'
+        : t < 4 ? 'Để yên bên trong: vẫn chỉ tính 1 lần'
+        : t < 6.5 ? 'Rút tay ra ngoài…'
+        : t < 7.8 ? 'Đưa tay vào lại…'
+        : t < 9.6 ? 'Đi vào lần nữa: tính thêm 1!' : '';
+      txt(c, msg, W / 2, 254, { size: 14, color: '#3b4a6b' });
+    },
+  },
+
+  slash: {
+    cycle: 10,
+    init: () => ({ cut: -1, lx: null, ly: null, spd: 0, trail: [] }),
+    draw(c, t, dt, s) {
+      bg(c, '#fff4e8');
+      const fx = 240, fy = 118, fr = 34;
+      let x = null, y = fy;
+      if (t >= 0.8 && t <= 5.2) { x = lerp(30, 450, (t - 0.8) / 4.4); y = fy + Math.sin((t - 0.8) * 2) * 6; }
+      else if (t >= 6 && t <= 6.6) { x = lerp(30, 450, (t - 6) / 0.6); y = fy - 30 + (x - 30) * 0.14; }
+      if (dt > 0) {
+        if (x !== null && s.lx !== null) {
+          // canvas px/s → game px/s (the game screen is 1280 wide)
+          const v = (Math.hypot(x - s.lx, y - s.ly) / dt) * (1280 / W);
+          s.spd = lerp(s.spd, v, 0.5);
+        } else if (x === null) s.spd *= Math.pow(0.02, dt);
+        if (x !== null) s.trail.push({ x, y, t });
+        s.trail = s.trail.filter((p) => t - p.t < 0.25 && p.t <= t);
+        if (x !== null && s.cut < 0 && Math.hypot(x - fx, y - fy) < fr && s.spd > 650) s.cut = t;
+        s.lx = x; s.ly = y;
+      }
+      if (s.cut < 0) {
+        c.beginPath(); c.arc(fx, fy, fr, 0, Math.PI * 2); c.fillStyle = '#ff9f1c'; c.fill();
+        c.fillStyle = '#3aa655'; c.beginPath(); c.ellipse(fx + 8, fy - fr - 4, 10, 5, -0.5, 0, Math.PI * 2); c.fill();
+        txt(c, '1/2', fx, fy, { size: 20, color: '#ffffff' });
+      } else {
+        const k = t - s.cut;
+        const halfDraw = (dx, dy, rot, top) => {
+          c.save(); c.translate(fx + dx, fy + dy); c.rotate(rot);
+          const a0 = top ? Math.PI : 0, a1 = top ? Math.PI * 2 : Math.PI;
+          c.beginPath(); c.arc(0, 0, fr, a0, a1); c.closePath(); c.fillStyle = '#ff9f1c'; c.fill();
+          c.beginPath(); c.arc(0, 0, fr - 6, a0, a1); c.closePath(); c.fillStyle = '#ffd27a'; c.fill();
+          c.restore();
+        };
+        halfDraw(-22 * k, -60 * k + 260 * k * k, -0.9 * k, true);
+        halfDraw(26 * k, 20 * k + 260 * k * k, 0.9 * k, false);
+        for (let i = 0; i < 8; i++) {
+          const a = i * 0.8;
+          c.beginPath();
+          c.arc(fx + Math.cos(a) * 90 * k, fy + Math.sin(a) * 70 * k + 200 * k * k, 4, 0, Math.PI * 2);
+          c.fillStyle = `rgba(255,159,28,${Math.max(0, 1 - k)})`; c.fill();
+        }
+      }
+      if (s.trail.length > 1) {
+        c.lineCap = 'round';
+        for (let i = 1; i < s.trail.length; i++) {
+          const a = s.trail[i - 1], b = s.trail[i];
+          c.strokeStyle = `rgba(255,210,63,${i / s.trail.length})`; c.lineWidth = 2 + 8 * (i / s.trail.length);
+          line(c, a.x, a.y, b.x, b.y);
+        }
+      }
+      if (x !== null) tip(c, x, y);
+      // speed meter
+      const mx = 40, my = 222, mw = 400, max = 2000;
+      txt(c, `Vận tốc ngón tay: ${Math.round(s.spd)} điểm ảnh/giây`, mx, my - 16, { size: 13, align: 'left' });
+      rr(c, mx, my, mw, 14, 7); c.fillStyle = '#ecdcc8'; c.fill();
+      const fill = Math.min(1, s.spd / max) * mw;
+      if (fill > 2) { rr(c, mx, my, fill, 14, 7); c.fillStyle = s.spd > 650 ? '#e8553d' : '#f2b134'; c.fill(); }
+      const m = mx + (650 / max) * mw;
+      c.strokeStyle = '#1d2b4f'; c.lineWidth = 2; line(c, m, my - 4, m, my + 18);
+      txt(c, '650: đủ nhanh để chém', m, my + 30, { size: 11, w: 600, color: '#1d2b4f' });
+      const msg = s.cut >= 0 ? 'Vung thật nhanh: CHÉM!'
+        : t >= 0.8 && t <= 5.2 ? 'Đi chậm qua quả: KHÔNG chém' : '';
+      if (msg) txt(c, msg, W / 2, 30, { size: 17, color: s.cut >= 0 ? '#d33b2c' : '#8a6500' });
+    },
+  },
+
+  dwell: {
+    cycle: 7.5,
+    init: () => ({ prog: 0, armed: true, pressedAt: -9 }),
+    draw(c, t, dt, s) {
+      bg(c, '#f3f0ff');
+      const bx = 150, by = 88, bw = 180, bh = 78;
+      const K = [[0, 70, 230], [1, 240, 127], [2.9, 240, 127], [3.6, 440, 127], [4.4, 440, 127], [5.2, 40, 127], [7.5, 40, 127]];
+      const [x, y] = kf(K, t);
+      const hovered = x > bx && x < bx + bw && y > by && y < by + bh;
+      // same rule as the game's dwell button
+      if (dt > 0) {
+        if (!hovered) s.armed = true;
+        if (hovered && s.armed) {
+          s.prog += dt / 0.9;
+          if (s.prog >= 1) { s.prog = 0; s.armed = false; s.pressedAt = t; }
+        } else s.prog = Math.max(0, s.prog - dt * 2);
+      }
+      const pressed = t - s.pressedAt < 1.4;
+      rr(c, bx, by + 5, bw, bh, 18); c.fillStyle = 'rgba(29,43,79,0.18)'; c.fill();
+      rr(c, bx, by - (hovered ? 3 : 0), bw, bh, 18); c.fillStyle = pressed ? '#1fa35b' : '#3b6fd8'; c.fill();
+      txt(c, pressed ? '✓ Đã bấm!' : '▶ Bắt đầu', bx + bw / 2, by + 32 - (hovered ? 3 : 0), { size: 22, color: '#ffffff' });
+      rr(c, bx + 16, by + bh - 20, bw - 32, 9, 4.5); c.fillStyle = 'rgba(255,255,255,0.3)'; c.fill();
+      if (s.prog > 0.01) { rr(c, bx + 16, by + bh - 20, (bw - 32) * s.prog, 9, 4.5); c.fillStyle = '#ffd23f'; c.fill(); }
+      if (pressed) {
+        const k = t - s.pressedAt;
+        for (let i = 0; i < 12; i++) {
+          const a = (i / 12) * Math.PI * 2;
+          c.fillStyle = ['#ffd23f', '#e8553d', '#1fa35b', '#3b6fd8'][i % 4];
+          c.fillRect(240 + Math.cos(a) * 120 * k, 127 + Math.sin(a) * 80 * k + 60 * k * k, 6, 6);
+        }
+      }
+      if (hovered && !pressed) pill(c, `Thanh vàng: ${Math.round(s.prog * 100)}%`, 240, 62, { size: 13, bg: '#ffe27a' });
+      tip(c, x, y);
+      const msg = t < 1 ? 'Đưa ngón tay tới nút…'
+        : t < 1.9 ? 'Giữ yên… thanh vàng đang chạy'
+        : t < 3.6 ? 'Thanh vàng đầy (0,9 giây) → nút được bấm!'
+        : t < 4.4 ? 'Thử đi ngang qua thật nhanh…'
+        : 'Thanh chưa đầy đã tụt → không bấm nhầm';
+      txt(c, msg, W / 2, 222, { size: 14, color: '#3b4a6b' });
+    },
+  },
+
+  random: {
+    cycle: 6.5,
+    init() {
+      const a = 2 + Math.floor(Math.random() * 8), b = 2 + Math.floor(Math.random() * 8), ans = a * b;
+      const wrong = [];
+      shuffle([ans + a, ans - a, ans + b, ans - b, ans + 1, ans - 1, ans + 10, ans + 2]).forEach((v) => {
+        if (v > 0 && v !== ans && !wrong.includes(v) && wrong.length < 3) wrong.push(v);
+      });
+      return { a, b, ans, opts: shuffle([ans, ...wrong]) };
+    },
+    draw(c, t, dt, s) {
+      bg(c, '#fff8e6');
+      const reel = (x, value, spinning) => {
+        rr(c, x, 48, 80, 80, 14); c.fillStyle = '#ffffff'; c.fill();
+        c.lineWidth = spinning ? 4 : 2; c.strokeStyle = spinning ? '#f2b134' : '#e7d6bd'; c.stroke();
+        txt(c, String(value), x + 40, 89, { size: 38, color: spinning ? '#b9a27a' : '#1d2b4f' });
+      };
+      const flicker = (seed) => 2 + ((Math.floor(t * 14) * 5 + seed) % 8);
+      reel(50, t < 1 ? flicker(1) : s.a, t < 1);
+      txt(c, '×', 160, 89, { size: 32 });
+      reel(190, t < 1.6 ? flicker(4) : s.b, t < 1.6);
+      txt(c, '=', 300, 89, { size: 32 });
+      rr(c, 330, 48, 100, 80, 14); c.fillStyle = t >= 2.2 ? '#d9f5e3' : '#ffffff'; c.fill();
+      c.lineWidth = 2; c.strokeStyle = t >= 2.2 ? '#1fa35b' : '#e7d6bd'; c.stroke();
+      txt(c, t >= 2.2 ? String(s.ans) : '?', 380, 89, { size: 38, color: t >= 2.2 ? '#1fa35b' : '#b9a27a' });
+      txt(c, '🎲 chọn số ngẫu nhiên', 160, 30, { size: 12, w: 600, color: '#8a6500' });
+      if (t >= 2.2) txt(c, 'máy tự tính', 380, 30, { size: 12, w: 600, color: '#1fa35b' });
+      if (t >= 3) {
+        s.opts.forEach((v, i) => {
+          const ox = 90 + i * 100, oy = 186;
+          const show = Math.min(1, (t - 3 - i * 0.12) * 5);
+          if (show <= 0) return;
+          const right = v === s.ans, reveal = t >= 4.2;
+          c.beginPath(); c.arc(ox, oy, 28 * show, 0, Math.PI * 2);
+          c.fillStyle = reveal ? (right ? '#7fd4a0' : '#e4e7ee') : '#8cc8ff'; c.fill();
+          txt(c, String(v), ox, oy, { size: 18 * show, color: reveal && !right ? '#8a93a8' : '#1d2b4f' });
+          if (reveal && right) txt(c, '✓', ox + 24, oy - 24, { size: 18, color: '#1fa35b' });
+        });
+      }
+      const msg = t < 1.6 ? 'Quay số ngẫu nhiên…'
+        : t < 3 ? 'Máy tự tính đáp án đúng'
+        : t < 4.2 ? 'Thêm đáp án sai, không trùng nhau'
+        : 'Lần sau lại là một đề khác!';
+      txt(c, msg, W / 2, 248, { size: 14, color: '#3b4a6b' });
+    },
+  },
+
+  gravity: {
+    cycle: 3.6,
+    draw(c, t) {
+      bg(c, '#eef8ff');
+      const groundY = 258;
+      c.fillStyle = '#b8e0b0'; c.fillRect(0, groundY, W, H - groundY);
+      const x0 = 50, y0 = 246, vx = 118, vy0 = -330, g = 300;
+      const pos = (τ) => [x0 + vx * τ, y0 + vy0 * τ + 0.5 * g * τ * τ];
+      const tEnd = 2.2, tt = Math.min(t, tEnd);
+      for (let τ = 0; τ <= tt + 1e-6; τ += 0.1) {
+        const [gx, gy] = pos(τ);
+        c.beginPath(); c.arc(gx, gy, 5, 0, Math.PI * 2); c.fillStyle = 'rgba(232,85,61,0.35)'; c.fill();
+      }
+      const [x, y] = pos(tt), vy = vy0 + g * tt;
+      emoji(c, '🍎', x, y, 30);
+      if (t < tEnd) {
+        const up = vy < 0;
+        if (Math.abs(vy) > 12) arrow(c, x + 22, y, x + 22, y + vy * 0.16, up ? '#3b6fd8' : '#e8553d', 4);
+        txt(c, Math.abs(vy) < 25 ? 'đỉnh: dừng một chút' : up ? 'đang lên, chậm dần' : 'đang rơi, nhanh dần',
+          x + 36, y, { size: 13, align: 'left', color: up ? '#3b6fd8' : '#d33b2c' });
+      }
+      arrow(c, 420, 34, 420, 78, '#6a5ae0', 5);
+      txt(c, 'Trọng lực', 420, 96, { size: 14, color: '#6a5ae0' });
+      txt(c, 'kéo xuống', 420, 114, { size: 12, w: 600, color: '#6a5ae0' });
+      txt(c, 'Chấm mờ: vị trí', 420, 150, { size: 12, w: 600, color: '#3b4a6b' });
+      txt(c, 'sau mỗi 0,1 giây', 420, 167, { size: 12, w: 600, color: '#3b4a6b' });
+    },
+  },
+
+  loop: {
+    draw(c, t, dt, s, el) {
+      bg(c, '#fdf6ff');
+      const cx = 170, cy = 138, R = 86;
+      c.setLineDash([6, 6]); c.strokeStyle = '#c9b6e8'; c.lineWidth = 3;
+      c.beginPath(); c.arc(cx, cy, R, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+      const nodes = [['📷', 'Lấy ảnh'], ['🧠', 'Tìm ngón tay'], ['🎯', 'Kiểm tra, tính điểm'], ['🖼️', 'Vẽ màn hình']];
+      const lapTime = 2.4, lap = el / lapTime, frac = lap % 1;
+      const active = Math.floor(frac * 4);
+      nodes.forEach(([e, name], i) => {
+        const a = -Math.PI / 2 + i * Math.PI / 2;
+        const nx = cx + Math.cos(a) * R, ny = cy + Math.sin(a) * R;
+        c.beginPath(); c.arc(nx, ny, 25, 0, Math.PI * 2);
+        c.fillStyle = i === active ? '#ffe27a' : '#ffffff'; c.fill();
+        c.lineWidth = 2.5; c.strokeStyle = i === active ? '#e0a800' : '#9b7fd1'; c.stroke();
+        emoji(c, e, nx, ny + 1, 22);
+        if (i === 3) txt(c, name, nx, ny + 40, { size: 12 });
+        else txt(c, name, nx + 32, ny, { size: 12, align: 'left' });
+      });
+      const ra = -Math.PI / 2 + frac * Math.PI * 2;
+      tip(c, cx + Math.cos(ra) * R, cy + Math.sin(ra) * R, 0.8);
+      txt(c, 'Vòng', cx, cy - 14, { size: 13, color: '#56607a' });
+      txt(c, String(Math.floor(lap) + 1), cx, cy + 12, { size: 30 });
+      txt(c, '(chiếu chậm)', 400, 40, { size: 12, w: 600, color: '#56607a' });
+      rr(c, 330, 168, 140, 84, 14); c.fillStyle = '#ffffff'; c.fill();
+      c.strokeStyle = '#c9b6e8'; c.lineWidth = 2; c.stroke();
+      txt(c, 'Tốc độ thật', 400, 184, { size: 12, color: '#56607a' });
+      txt(c, String(Math.floor(el * 60)), 400, 212, { size: 26, color: '#6a5ae0' });
+      txt(c, '≈ 60 vòng mỗi giây', 400, 238, { size: 11.5, w: 600, color: '#56607a' });
+    },
+  },
+
+  privacy: {
+    cycle: 8,
+    draw(c, t) {
+      bg(c, '#f1fbf4');
+      // laptop
+      rr(c, 40, 34, 220, 146, 10); c.fillStyle = '#22304f'; c.fill();
+      rr(c, 48, 44, 204, 128, 6); c.fillStyle = '#d9ecff'; c.fill();
+      c.beginPath(); c.arc(150, 39, 3, 0, Math.PI * 2); c.fillStyle = '#7fd4a0'; c.fill();
+      c.beginPath(); c.moveTo(24, 180); c.lineTo(276, 180); c.lineTo(292, 196); c.lineTo(8, 196); c.closePath();
+      c.fillStyle = '#9aa6bd'; c.fill();
+      // cloud
+      c.fillStyle = '#dfe6f3';
+      [[380, 70, 26], [408, 58, 30], [438, 72, 24], [410, 80, 26]].forEach(([x, y, r]) => { c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill(); });
+      txt(c, 'Internet', 410, 76, { size: 13, color: '#56607a' });
+      // photo travels from the camera into the computer, becomes a dot, then disappears
+      const photo = (x, y, s, a) => {
+        c.save(); c.globalAlpha = a; c.translate(x, y); c.scale(s, s);
+        rr(c, -34, -24, 68, 48, 5); c.fillStyle = '#ffffff'; c.fill(); c.strokeStyle = '#8fb3ef'; c.lineWidth = 2; c.stroke();
+        c.fillStyle = '#ffcf9e'; c.beginPath(); c.arc(0, -6, 8, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#3b6fd8'; c.fillRect(-9, 3, 18, 14);
+        c.restore();
+      };
+      const px = 150, py = 108;
+      if (t < 1.4) { const u = ease(t / 1.4); photo(px, lerp(40, py, u), lerp(0.3, 1.4, u), 1); }
+      else if (t < 3.4) {
+        const fade = t < 2.6 ? 1 : 1 - (t - 2.6) / 0.8;
+        photo(px, py, 1.4, Math.max(0, fade));
+        if (t > 1.9) tip(c, px + 26, py - 22, 0.9);
+      } else tip(c, px + 26, py - 22, 0.9);
+      if (t >= 3.6) {
+        const u = clamp((t - 3.6) / 1, 0, 1);
+        c.setLineDash([6, 5]); c.strokeStyle = '#8a93a8'; c.lineWidth = 3;
+        line(c, 262, 100, lerp(262, 330, u), lerp(100, 84, u)); c.setLineDash([]);
+        if (t >= 4.6) {
+          c.beginPath(); c.arc(336, 84, 20, 0, Math.PI * 2); c.fillStyle = '#d33b2c'; c.fill();
+          txt(c, '✗', 336, 85, { size: 22, color: '#ffffff' });
+        }
+      }
+      if (t >= 5.8) emoji(c, '🔒', 228, 66, 22);
+      const msg = t < 1.4 ? 'Camera đưa ảnh vào máy tính'
+        : t < 2.6 ? 'AI chỉ lấy vị trí ngón tay (chấm vàng)'
+        : t < 3.6 ? 'Ảnh bỏ đi ngay, không lưu lại'
+        : t < 5.8 ? 'Không gửi hình lên mạng'
+        : 'Hình ảnh không rời khỏi máy 🛡️';
+      pill(c, msg, W / 2, 236, { size: 15, bg: '#ffffff', border: '#a8dcb9' });
+    },
+  },
+
+  offline: {
+    draw(c, t, dt, s, el) {
+      bg(c, '#fffaf0');
+      // wifi icon with a blinking cross
+      const wx = 86, wy = 120;
+      c.strokeStyle = '#b9c2d6'; c.lineCap = 'round'; c.lineWidth = 8;
+      [44, 30, 16].forEach((r) => { c.beginPath(); c.arc(wx, wy, r, -Math.PI * 0.78, -Math.PI * 0.22); c.stroke(); });
+      c.beginPath(); c.arc(wx, wy, 5, 0, Math.PI * 2); c.fillStyle = '#b9c2d6'; c.fill();
+      c.strokeStyle = `rgba(211,59,44,${0.55 + 0.45 * Math.sin(el * 4)})`; c.lineWidth = 7;
+      line(c, wx - 40, wy - 54, wx + 40, wy + 8);
+      txt(c, 'Mất mạng', wx, 150, { size: 15, color: '#d33b2c' });
+      // mini game keeps running
+      const sx = 180, sy = 22, sw = 284, sh = 170;
+      rr(c, sx, sy, sw, sh, 12); c.fillStyle = '#1f2a44'; c.fill();
+      c.save(); rr(c, sx + 6, sy + 6, sw - 12, sh - 12, 8); c.clip();
+      c.fillStyle = '#2d3c63'; c.fillRect(sx, sy, sw, sh);
+      for (let i = 0; i < 5; i++) {
+        const bx = sx + 34 + i * 54, by = sy + sh + 20 - ((el * 34 + i * 47) % (sh + 40));
+        c.beginPath(); c.arc(bx, by, 20, 0, Math.PI * 2); c.fillStyle = ['#8cc8ff', '#ffb3c7', '#b5f0c4', '#ffe27a', '#d7c4ff'][i]; c.fill();
+        txt(c, String((i * 7 + 3) % 20 + 1), bx, by, { size: 13 });
+      }
+      tip(c, sx + sw / 2 + Math.cos(el * 1.6) * 90, sy + sh / 2 + Math.sin(el * 2.3) * 45);
+      c.restore();
+      pill(c, 'Vẫn chơi bình thường!', sx + sw / 2, sy + 22, { size: 13, bg: '#1fa35b', color: '#ffffff' });
+      rr(c, 16, 206, 448, 50, 12); c.fillStyle = '#ffffff'; c.fill(); c.strokeStyle = '#f2c94c'; c.lineWidth = 2; c.stroke();
+      emoji(c, '💾', 42, 231, 22);
+      txt(c, 'Có sẵn trong máy: AI nhận diện tay (~7,5 MB) + 9 trò chơi', 252, 231, { size: 13.5 });
+    },
+  },
+};
+
+// ---------- runner ----------
+const runners = [];
+document.querySelectorAll('[data-scene]').forEach((card) => {
+  const canvas = card.querySelector('canvas');
+  const r = {
+    scene: SCENES[card.dataset.scene], canvas, ctx: canvas.getContext('2d'),
+    elapsed: 0, paused: false, visible: false, cycleIndex: -1, state: null, k: 1,
+  };
+  const controls = document.createElement('div');
+  controls.className = 'controls';
+  const pauseBtn = document.createElement('button');
+  const restartBtn = document.createElement('button');
+  const syncLabel = () => { pauseBtn.textContent = r.paused ? '▶ Chạy tiếp' : '⏸ Dừng'; };
+  const togglePause = () => { r.paused = !r.paused; syncLabel(); };
+  pauseBtn.addEventListener('click', togglePause);
+  canvas.addEventListener('click', togglePause);
+  restartBtn.textContent = '↺ Xem lại';
+  restartBtn.addEventListener('click', () => { r.elapsed = 0; r.cycleIndex = -1; r.state = null; r.paused = false; syncLabel(); });
+  syncLabel();
+  controls.append(pauseBtn, restartBtn);
+  canvas.parentElement.append(controls);
+  runners.push(r);
+});
+
+function fit(r) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  r.k = (r.canvas.clientWidth / W) * dpr || 1;
+  r.canvas.width = Math.round(W * r.k);
+  r.canvas.height = Math.round(H * r.k);
+}
+
+function render(r, dt) {
+  const { scene } = r;
+  let t = r.elapsed;
+  if (scene.cycle) {
+    const n = Math.floor(t / scene.cycle);
+    if (n !== r.cycleIndex) { r.cycleIndex = n; r.state = scene.init ? scene.init() : {}; }
+    t -= n * scene.cycle;
+  } else if (!r.state) r.state = scene.init ? scene.init() : {};
+  r.ctx.setTransform(r.k, 0, 0, r.k, 0, 0);
+  scene.draw(r.ctx, t, dt, r.state, r.elapsed);
+}
+
+// Only animate cards that are on screen.
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e) => { const r = runners.find((x) => x.canvas === e.target); if (r) r.visible = e.isIntersecting; });
+});
+runners.forEach((r) => { fit(r); observer.observe(r.canvas); render(r, 0); });
+window.addEventListener('resize', () => runners.forEach((r) => { fit(r); render(r, 0); }));
+
+let last = 0;
+function frame(now) {
+  const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+  last = now;
+  runners.forEach((r) => {
+    if (!r.visible) return;
+    const step = r.paused ? 0 : dt;
+    r.elapsed += step;
+    render(r, step);
+  });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
