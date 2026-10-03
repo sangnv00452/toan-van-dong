@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isUnlocked, type KeyValueStore, Progress, RANKS, rankIndex, rankProgress, xpFor } from '../src/core/progress';
+import { isUnlocked, type KeyValueStore, Progress, RANKS, rankChangeMessage, rankIndex, rankProgress, xpFor } from '../src/core/progress';
 import { CHAPTERS } from '../src/data/lessons';
 import { FROG_GAMES } from '../src/games/frog/registry';
 import { isCorrectAnswer, parseAnswer } from '../src/math/answer-check';
@@ -117,6 +117,13 @@ describe('KN and ranks', () => {
     expect(rankProgress(99999)).toBe(1);
   });
 
+  it('says when Green turns into a tadpole or back into a frog', () => {
+    expect(rankChangeMessage(120, 95)).toContain('nòng nọc');
+    expect(rankChangeMessage(95, 120)).toContain('hóa thành ếch');
+    expect(rankChangeMessage(320, 290)).toContain('Ếch con');
+    expect(rankChangeMessage(150, 160)).toBeNull();
+  });
+
   it('unlocks levels one by one', () => {
     expect(isUnlocked(0, 1)).toBe(true);
     expect(isUnlocked(0, 2)).toBe(false);
@@ -127,7 +134,7 @@ describe('KN and ranks', () => {
     const data = new Map<string, string>();
     const store: KeyValueStore = { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v) };
     const p = new Progress(store);
-    expect(p.addXp(120)).toBe(true);
+    expect(p.addXp(120)).toBe(1);
     p.markCleared('apple-catch', 2, 3);
     p.markCleared('apple-catch', 2, 1);
     p.saveLesson('decimals-intro', 3);
@@ -138,6 +145,15 @@ describe('KN and ranks', () => {
     expect(again.clearedUpTo('apple-catch', 1)).toBe(0);
     expect(again.lessonBest('decimals-intro')).toBe(3);
     expect(again.muted).toBe(true);
+  });
+
+  it('takes KN away without going below 0 and reports a lower rank', () => {
+    const p = new Progress(null);
+    p.addXp(103);
+    expect(p.addXp(-5)).toBe(-1);
+    expect(p.xp).toBe(98);
+    expect(p.addXp(-500)).toBe(0);
+    expect(p.xp).toBe(0);
   });
 });
 

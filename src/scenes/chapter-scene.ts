@@ -2,7 +2,7 @@ import type { App, Scene } from '../app';
 import { PALETTE, W } from '../config';
 import { DwellButton } from '../core/dwell-button';
 import { text, wrapLines } from '../core/draw';
-import { drawFrog, drawLilyPad, drawPond, speechBubble } from '../core/frog-art';
+import { drawGreen, drawLilyPad, drawPond, speechBubble } from '../core/frog-art';
 import type { Chapter } from '../data/lessons';
 import { LearnScene } from './learn-scene';
 import { LessonScene } from './lesson-scene';
@@ -50,7 +50,7 @@ export class ChapterScene implements Scene {
     drawPond(ctx, this.t);
     text(ctx, `${this.chapter.icon} ${this.chapter.title}`, W / 2 + 100, 56, { size: 46, color: PALETTE.yellow, outline: PALETTE.ink });
     drawLilyPad(ctx, 220, 590, 150);
-    drawFrog(ctx, 220, 530 + Math.sin(this.t * 2) * 4, 1.3, { teacher: true, mood: 'happy', blink: this.t % 3 < 0.12 });
+    drawGreen(ctx, 220, 530 + Math.sin(this.t * 2) * 4, 1.3, this.app.progress.xp, { teacher: true, mood: 'happy', blink: this.t % 3 < 0.12 }, this.t);
     speechBubble(ctx, 40, 190, 360, 120, 200, 400);
     wrapLines(ctx, 'Chương này có những chủ đề bên phải. Em chọn một chủ đề để học nhé!', 22, 300).forEach((line, i) => {
       text(ctx, line, 220, 222 + i * 28, { size: 22, color: PALETTE.ink, weight: 700 });

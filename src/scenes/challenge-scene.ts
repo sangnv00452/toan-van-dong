@@ -82,7 +82,7 @@ export class ChallengeScene implements Scene {
       this.fx.confetti(W / 2, H);
     }
     const xp = xpFor(this.correct, cleared);
-    const rankUp = p.addXp(xp);
+    const rankUp = p.addXp(xp) > 0;
     this.outcome = { cleared, message, correct: this.correct, wrong: this.wrong, goal: this.goal, xp, rankUp, firstClear };
   }
 

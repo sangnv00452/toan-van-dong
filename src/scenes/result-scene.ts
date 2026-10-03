@@ -31,7 +31,7 @@ export class ResultScene implements Scene {
     this.menu = new DwellButton({ x: W / 2 + 20, y: 540, w: 420, h: 110 }, '☰ Chọn trò khác', { color: PALETTE.blue, size: 40, dwell: 1.0 });
     this.fx.confetti(W / 2, H);
     this.xp = xpFor(scores.reduce((sum, s) => sum + s, 0));
-    this.rankUp = app.progress.addXp(this.xp);
+    this.rankUp = app.progress.addXp(this.xp) > 0;
   }
 
   private stars(score: number): number {

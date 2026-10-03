@@ -20,6 +20,8 @@ export const RANKS: Rank[] = [
 ];
 
 export const XP_PER_CORRECT = 10;
+/** KN lost for each wrong exercise in the Learn section. */
+export const XP_WRONG_PENALTY = 5;
 /** Extra KN for clearing a practice level. */
 export const XP_CLEAR_BONUS = 20;
 
@@ -36,6 +38,15 @@ export function rankProgress(xp: number): number {
   const i = rankIndex(xp);
   if (i === RANKS.length - 1) return 1;
   return (xp - RANKS[i].min) / (RANKS[i + 1].min - RANKS[i].min);
+}
+
+/** What Green says when his rank changes, or null when it did not. */
+export function rankChangeMessage(fromXp: number, toXp: number): string | null {
+  const from = rankIndex(fromXp);
+  const to = rankIndex(toXp);
+  if (to === from) return null;
+  if (to < from) return to === 0 ? 'Ôi không! Mình hóa thành nòng nọc mất rồi!' : `Ôi! Mình tụt xuống ${RANKS[to].name}, bé lại rồi!`;
+  return from === 0 ? 'Yeah! Mình đã hóa thành ếch rồi!' : `Mình lên ${RANKS[to].name}, lớn hơn rồi!`;
 }
 
 /** Level 1 is always open; level n opens once level n-1 is cleared. */
@@ -91,12 +102,15 @@ export class Progress {
     this.save();
   }
 
-  /** Adds KN; returns true when the player reached a new rank. */
-  addXp(amount: number): boolean {
+  /**
+   * Adds KN (negative to take some away; KN never goes below 0).
+   * Returns how many ranks were gained (> 0) or lost (< 0).
+   */
+  addXp(amount: number): number {
     const before = rankIndex(this.data.xp);
-    this.data.xp += Math.max(0, amount);
+    this.data.xp = Math.max(0, this.data.xp + amount);
     this.save();
-    return rankIndex(this.data.xp) > before;
+    return rankIndex(this.data.xp) - before;
   }
 
   clearedUpTo(gameId: string, difficulty: number): number {

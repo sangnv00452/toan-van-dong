@@ -22,6 +22,22 @@ const BODY_DARK = '#2e7d32';
 const BELLY = '#c5e1a5';
 const ICE = '#a8dcf5';
 const ICE_DARK = '#6bb8de';
+/** Bold outline around Green so he stands out on the camera image and the pond. */
+const OUTLINE = '#1b4d20';
+const OUTLINE_ICE = '#3f87b0';
+const OUTLINE_W = 8;
+
+/** Every part of the frog's silhouette as [x, y, rx, ry, rotation] ellipses. */
+const FROG_SHAPES: [number, number, number, number, number][] = [
+  [-60, 34, 32, 22, -0.5],
+  [60, 34, 32, 22, 0.5],
+  [0, 16, 70, 52, 0],
+  [0, -22, 58, 36, 0],
+  [-32, 64, 18, 9, 0],
+  [32, 64, 18, 9, 0],
+  [-25, -50, 19, 19, 0],
+  [25, -50, 19, 19, 0],
+];
 
 /**
  * Green the frog, drawn with shapes (no image files). `x, y` is the middle of
@@ -52,6 +68,16 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
   ctx.translate(x, y);
   ctx.scale(s, s);
 
+  // Outline first: stroke every part, then the fills below cover the inner
+  // halves of those lines, so only the outer edge of the silhouette remains.
+  ctx.strokeStyle = o.frozen ? OUTLINE_ICE : OUTLINE;
+  ctx.lineWidth = OUTLINE_W;
+  for (const [ex, ey, rx, ry, rot] of FROG_SHAPES) {
+    ctx.beginPath();
+    ctx.ellipse(ex, ey, rx, ry, rot, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
   // Back legs
   ctx.fillStyle = dark;
   for (const side of [-1, 1]) {
@@ -71,6 +97,9 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
   ctx.beginPath();
   ctx.ellipse(0, 28, 48, 34, 0, 0, Math.PI * 2);
   ctx.fill();
+  ctx.strokeStyle = o.frozen ? 'rgba(63,135,176,0.45)' : 'rgba(27,77,32,0.4)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
   // Front feet
   ctx.fillStyle = dark;
   for (const side of [-1, 1]) {
@@ -101,6 +130,9 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
     ctx.beginPath();
     ctx.arc(ex, ey, 13, 0, Math.PI * 2);
     ctx.fill();
+    ctx.strokeStyle = o.frozen ? OUTLINE_ICE : OUTLINE;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
     ctx.fillStyle = PALETTE.ink;
     ctx.beginPath();
     ctx.arc(ex + look, ey + 1, 6.5, 0, Math.PI * 2);
@@ -157,6 +189,139 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
     ctx.restore();
     emoji(ctx, '❄️', x - 74 * s, y - 66 * s, 30 * s);
     emoji(ctx, '❄️', x + 76 * s, y + 46 * s, 24 * s);
+  }
+}
+
+/** Green's size at each rank: he grows as he ranks up. Rank 0 (Nòng nọc) is drawn as a tadpole. */
+export const RANK_SCALE = [0.8, 0.7, 0.8, 0.9, 1.0, 1.1];
+
+/**
+ * Green as a tadpole (rank Nòng nọc): a round head and a wiggling tail.
+ * Same size convention as `drawFrog`; `t` (seconds) animates the tail.
+ */
+export function drawTadpole(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, o: FrogOpts = {}, t = 0): void {
+  const body = o.frozen ? ICE : '#5b8c3a';
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(s, s);
+  // Tail: thick to thin, waving. Drawn twice: a wider dark pass gives the outline.
+  ctx.lineCap = 'round';
+  for (const [color, extra] of [
+    [o.frozen ? OUTLINE_ICE : OUTLINE, OUTLINE_W],
+    [o.frozen ? ICE_DARK : '#476e2c', 0],
+  ] as const) {
+    ctx.strokeStyle = color;
+    let px = 40;
+    let py = 10;
+    for (let i = 1; i <= 12; i++) {
+      const nx = 40 + i * 11;
+      const ny = 10 + Math.sin(t * 9 - i * 0.6) * i * 1.6;
+      ctx.lineWidth = Math.max(3, 30 - i * 2.3) + extra;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(nx, ny);
+      ctx.stroke();
+      px = nx;
+      py = ny;
+    }
+  }
+  // Round head-body with its outline
+  ctx.strokeStyle = o.frozen ? OUTLINE_ICE : OUTLINE;
+  ctx.lineWidth = OUTLINE_W;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 58, 50, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = body;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 58, 50, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = o.frozen ? '#e3f4fc' : '#a5c97a';
+  ctx.beginPath();
+  ctx.ellipse(-4, 18, 36, 24, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Eyes
+  const look = (o.look ?? 0) * 4;
+  for (const side of [-1, 1]) {
+    const ex = side * 25;
+    const ey = -30;
+    if (o.blink) {
+      ctx.strokeStyle = '#1b3d1f';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(ex - 10, ey);
+      ctx.lineTo(ex + 10, ey);
+      ctx.stroke();
+      continue;
+    }
+    ctx.fillStyle = PALETTE.white;
+    ctx.beginPath();
+    ctx.arc(ex, ey, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = PALETTE.ink;
+    ctx.beginPath();
+    ctx.arc(ex + look, ey + 1, 6.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = PALETTE.white;
+    ctx.beginPath();
+    ctx.arc(ex + look + 2.5, ey - 2.5, 2.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  if (o.teacher) {
+    ctx.save();
+    ctx.translate(0, 20);
+    drawTeacherGear(ctx);
+    ctx.restore();
+  }
+  // Mouth
+  ctx.strokeStyle = '#1b3d1f';
+  ctx.lineWidth = 3.5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  const mood = o.tongue ? 'eat' : (o.mood ?? 'calm');
+  if (mood === 'eat') {
+    ctx.fillStyle = '#7a1f2b';
+    ctx.ellipse(0, 2, 10, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (mood === 'sad' || o.frozen) {
+    ctx.arc(0, 16, 11, Math.PI * 1.2, Math.PI * 1.8);
+    ctx.stroke();
+  } else {
+    ctx.arc(0, -6, 14, Math.PI * 0.2, Math.PI * 0.8);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** Green at the size and shape that match his KN: a tadpole at rank 0, a bigger frog at each higher rank. */
+export function drawGreen(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, xp: number, o: FrogOpts = {}, t = 0): void {
+  const i = rankIndex(xp);
+  const k = s * RANK_SCALE[i];
+  if (i === 0) drawTadpole(ctx, x, y, k, o, t);
+  else drawFrog(ctx, x, y, k, o);
+}
+
+/** Seconds the rank-change transformation takes. */
+export const MORPH_TIME = 1.8;
+
+/**
+ * Green changing rank: the old form shrinks away, sparkles burst, and the new
+ * form (bigger or smaller, frog or tadpole) pops in. `t` = seconds since the change.
+ */
+export function drawGreenChange(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, fromXp: number, toXp: number, t: number, o: FrogOpts = {}): void {
+  if (t >= MORPH_TIME) return drawGreen(ctx, x, y, s, toXp, o, t);
+  if (t < 0.7) {
+    const shrink = 1 - (t / 0.7) * 0.6;
+    drawGreen(ctx, x + Math.sin(t * 40) * 4, y, s * shrink, fromXp, o, t);
+  } else {
+    const k = Math.min(1, (t - 0.9) / 0.6);
+    if (k > 0) drawGreen(ctx, x, y, s * (0.4 + 0.6 * k + Math.sin(k * Math.PI) * 0.15), toXp, o, t);
+  }
+  if (t > 0.5 && t < 1.4) {
+    const spread = (t - 0.5) * 160 * s;
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2 + t * 2;
+      emoji(ctx, '✨', x + Math.cos(a) * spread, y + Math.sin(a) * spread * 0.7, 30 * s);
+    }
   }
 }
 

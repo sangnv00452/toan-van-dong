@@ -3,9 +3,9 @@ import { PALETTE, W } from '../config';
 import { DwellButton } from '../core/dwell-button';
 import { panel, text, wrapLines } from '../core/draw';
 import { Effects } from '../core/effects';
-import { drawFrog, drawLilyPad, drawPond, speechBubble } from '../core/frog-art';
-import { xpFor } from '../core/progress';
-import { praise } from '../core/voice';
+import { drawGreen, drawGreenChange, drawLilyPad, drawPond, MORPH_TIME, speechBubble } from '../core/frog-art';
+import { rankChangeMessage, XP_WRONG_PENALTY, xpFor } from '../core/progress';
+import { praise, say } from '../core/voice';
 import type { Chapter, Example, Exercise, Topic } from '../data/lessons';
 import { isCorrectAnswer } from '../math/answer-check';
 import { ChapterScene } from './chapter-scene';
@@ -50,7 +50,10 @@ export class LessonScene implements Scene {
   private readonly check: DwellButton;
   private readonly again: DwellButton;
   private earned: number | null = null;
-  private rankUp = false;
+  /** KN taken away for wrong answers in this lesson. */
+  private penalty = 0;
+  /** Green's transformation after a rank change, and what he says about it. */
+  private morph: { from: number; to: number; t: number; message: string } | null = null;
 
   constructor(
     private readonly app: App,
@@ -98,10 +101,22 @@ export class LessonScene implements Scene {
   private finish(): void {
     const correct = this.answers.filter((a) => a.correct).length;
     this.earned = xpFor(correct);
-    this.rankUp = this.app.progress.addXp(this.earned);
+    this.changeXp(this.earned);
     this.app.progress.saveLesson(this.topic.id, correct);
     this.app.sfx.cheer();
     this.fx.confetti(BOARD.x + BOARD.w / 2, 700);
+  }
+
+  /** Adds or removes KN; if Green's rank changes he transforms and says so. */
+  private changeXp(delta: number): void {
+    const before = this.app.progress.xp;
+    this.app.progress.addXp(delta);
+    const after = this.app.progress.xp;
+    const message = rankChangeMessage(before, after);
+    if (message) {
+      this.morph = { from: before, to: after, t: 0, message };
+      say(message, () => this.app.sfx.croak(after > before ? 1.35 : 0.7));
+    }
   }
 
   /** Exercise pages block "Tiếp" until the answer is checked. */
@@ -136,13 +151,20 @@ export class LessonScene implements Scene {
       this.fx.burst(x, 340, PALETTE.yellow, 26);
       this.fx.float(x, 300, '⭐ Đúng!', PALETTE.yellow, 40);
     } else {
+      // A wrong answer costs KN, and can make Green lose a rank.
       this.app.sfx.wrong();
+      const before = this.app.progress.xp;
+      this.changeXp(-XP_WRONG_PENALTY);
+      const lost = before - this.app.progress.xp;
+      this.penalty += lost;
+      if (lost > 0) this.fx.float(x, 300, `−${lost} KN`, PALETTE.red, 40);
     }
   }
 
   update(dt: number): void {
     this.t += dt;
     this.fx.update(dt);
+    if (this.morph) this.morph.t += dt;
     const input = this.app.input;
     if (this.back.update(dt, input)) {
       this.app.setScene(new ChapterScene(this.app, this.chapter));
@@ -210,8 +232,15 @@ export class LessonScene implements Scene {
       this.drawSummary(ctx);
     }
 
+    const m = this.morph;
+    // For a while after a rank change Green talks about it instead.
+    const changing = m !== null && m.t < MORPH_TIME + 1.5;
+    if (changing) say = m.message;
     drawLilyPad(ctx, 190, 600, 150);
-    drawFrog(ctx, 190, 540 + Math.sin(this.t * 2) * 3, 1.25, { teacher: true, mood, blink: this.t % 3.3 < 0.12, look: 0.8 });
+    const look = { teacher: true, mood, blink: this.t % 3.3 < 0.12, look: 0.8 } as const;
+    const fy = 540 + Math.sin(this.t * 2) * 3;
+    if (changing) drawGreenChange(ctx, 190, fy, 1.25, m.from, m.to, m.t, look);
+    else drawGreen(ctx, 190, fy, 1.25, this.app.progress.xp, look, this.t);
     speechBubble(ctx, 20, 200, 340, 110, 170, 410);
     wrapLines(ctx, say, 24, 300).forEach((line, i, all) => {
       text(ctx, line, 190, 255 + (i - (all.length - 1) / 2) * 30, { size: 24, color: PALETTE.ink, weight: 700 });
@@ -271,8 +300,10 @@ export class LessonScene implements Scene {
     const cx = BOARD.x + BOARD.w / 2;
     text(ctx, '🎉 Hoàn thành chủ đề!', cx, BOARD.y + 70, { size: 46, color: PALETTE.yellow });
     text(ctx, `Đúng ${correct}/${this.answers.length} câu`, cx, BOARD.y + 160, { size: 44 });
-    text(ctx, `+${this.earned ?? 0} KN`, cx, BOARD.y + 240, { size: 60, color: '#7CFC9A' });
-    if (this.rankUp) text(ctx, '⬆ Em đã lên hạng mới!', cx, BOARD.y + 320, { size: 34, color: PALETTE.orange });
+    const wrong = this.answers.length - correct;
+    const kn = this.penalty > 0 ? `+${this.earned ?? 0} KN   −${this.penalty} KN (${wrong} câu sai)` : `+${this.earned ?? 0} KN`;
+    text(ctx, kn, cx, BOARD.y + 240, { size: this.penalty > 0 ? 44 : 60, color: '#7CFC9A', maxWidth: BOARD.w - 60 });
+    if (this.morph) text(ctx, this.morph.message, cx, BOARD.y + 320, { size: 30, color: PALETTE.orange, maxWidth: BOARD.w - 60 });
     this.again.draw(ctx);
   }
 }
