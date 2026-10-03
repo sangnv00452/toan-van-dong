@@ -1,8 +1,8 @@
 import type { App, Scene } from '../app';
 import { PALETTE, W } from '../config';
 import { DwellButton } from '../core/dwell-button';
-import { text, wrapLines } from '../core/draw';
-import { drawGreen, drawLilyPad, drawPond, drawPondDecor, drawRankCard, speechBubble } from '../core/frog-art';
+import { panel, text, wrapLines } from '../core/draw';
+import { drawGreen, drawGreenChange, drawLilyPad, MORPH_TIME, drawPond, drawPondDecor, drawRankCard, speechBubble } from '../core/frog-art';
 import { rankIndex } from '../core/progress';
 import { TouchTracker, inCircle } from '../games/round-kit';
 import { LearnScene } from './learn-scene';
@@ -28,6 +28,13 @@ export class HomeScene implements Scene {
   private readonly practice: DwellButton;
   private readonly learn: DwellButton;
   private readonly sound: DwellButton;
+  private readonly reset: DwellButton;
+  private readonly confirmYes: DwellButton;
+  private readonly confirmNo: DwellButton;
+  /** The "start over?" question is on screen. */
+  private confirming = false;
+  /** After starting over, Green shrinks back into a tadpole (KN before the reset, seconds since). */
+  private restart: { fromXp: number; t: number } | null = null;
   private readonly frogTouch = new TouchTracker();
   /** Seconds left of the croak animation (mouth open, little jump). */
   private croaking = 0;
@@ -47,12 +54,30 @@ export class HomeScene implements Scene {
       size: 42,
       dwell: 1.0,
     });
-    this.sound = new DwellButton({ x: W - 410, y: 560, w: 370, h: 76 }, '', { color: 'rgba(29,35,64,0.8)', size: 26, dwell: 1.0 });
+    this.sound = new DwellButton({ x: W - 410, y: 560, w: 180, h: 76 }, '', { color: 'rgba(29,35,64,0.8)', size: 22, dwell: 1.0 });
+    this.reset = new DwellButton({ x: W - 220, y: 560, w: 180, h: 76 }, '↺ Chơi lại từ đầu', { color: 'rgba(29,35,64,0.8)', size: 20, dwell: 1.0 });
+    // Wiping progress by hand needs a longer hold, so it cannot happen by accident.
+    this.confirmYes = new DwellButton({ x: W / 2 - 330, y: 430, w: 310, h: 96 }, '✓ Xóa, chơi lại', { color: PALETTE.red, size: 30, dwell: 1.5 });
+    this.confirmNo = new DwellButton({ x: W / 2 + 20, y: 430, w: 310, h: 96 }, '✗ Thôi', { color: PALETTE.green, size: 30, dwell: 1.0 });
   }
 
   update(dt: number): void {
     this.t += dt;
     const input = this.app.input;
+    if (this.restart) this.restart.t += dt;
+    if (this.confirming) {
+      // While asking, only the two answers respond.
+      if (this.confirmYes.update(dt, input)) {
+        this.restart = { fromXp: this.app.progress.xp, t: 0 };
+        this.app.progress.reset();
+        this.confirming = false;
+        this.app.sfx.croak(0.8);
+      } else if (this.confirmNo.update(dt, input)) {
+        this.confirming = false;
+        this.app.sfx.pop();
+      }
+      return;
+    }
     this.croaking = Math.max(0, this.croaking - dt);
     const onFrog = (x: number, y: number) => inCircle(x, y, FROG_X, FROG_Y, FROG_HIT_R);
     const clicked = input.click !== null && onFrog(input.click.x, input.click.y);
@@ -71,6 +96,9 @@ export class HomeScene implements Scene {
       p.muted = !p.muted;
       if (p.muted) this.app.music.stop();
       else this.app.music.start();
+    } else if (this.reset.update(dt, input)) {
+      this.confirming = true;
+      this.app.sfx.pop();
     }
   }
 
@@ -85,23 +113,41 @@ export class HomeScene implements Scene {
     const hop = this.croaking > 0 ? Math.sin(((CROAK_TIME - this.croaking) / CROAK_TIME) * Math.PI) * 30 : 0;
     drawLilyPad(ctx, FROG_X, FROG_Y + 70, 210);
     // Green's size and shape follow his rank (a tadpole at Nòng nọc).
-    drawGreen(ctx, FROG_X, FROG_Y + bob - hop, 1.6, this.app.progress.xp, {
+    const looks = {
       mood: this.croaking > 0 ? 'eat' : 'happy',
       blink: this.croaking === 0 && this.t % 3.2 < 0.13,
       look: Math.sin(this.t * 0.7),
-    }, this.t);
+    } as const;
+    const r = this.restart;
+    if (r && r.t < MORPH_TIME) drawGreenChange(ctx, FROG_X, FROG_Y + bob, 1.6, r.fromXp, 0, r.t, looks);
+    else drawGreen(ctx, FROG_X, FROG_Y + bob - hop, 1.6, this.app.progress.xp, looks, this.t);
 
     let tip = this.croaking > 0 ? 'Ộp ộp! Ộp ộp! 🐸' : TIPS[Math.floor(this.t / 5) % TIPS.length];
     // As a tadpole, Green introduces himself differently.
     if (tip === TIPS[0] && rankIndex(this.app.progress.xp) === 0) tip = 'Chào bạn! Mình là nòng nọc Green. Gom 100 KN để mình hóa thành ếch nhé!';
+    if (r && r.t < MORPH_TIME + 2.5) tip = 'Mình lại là nòng nọc rồi! Cùng học lại từ đầu nhé!';
     speechBubble(ctx, 60, 240, 400, 92, FROG_X - 60, FROG_Y - 90);
     wrapLines(ctx, tip, 22, 360).forEach((line, i, all) => {
       text(ctx, line, 260, 286 + (i - (all.length - 1) / 2) * 28, { size: 22, color: PALETTE.ink, weight: 700 });
     });
 
-    this.sound.label = this.app.progress.muted ? '🔇 Nhạc: đang tắt' : '🔊 Nhạc: đang bật';
+    this.sound.label = this.app.progress.muted ? '🔇 Nhạc: tắt' : '🔊 Nhạc: bật';
     this.practice.draw(ctx);
     this.learn.draw(ctx);
     this.sound.draw(ctx);
+    this.reset.draw(ctx);
+    if (this.confirming) this.drawConfirm(ctx);
+  }
+
+  /** "Start over?" box drawn on the canvas (browser pop-ups would block the game). */
+  private drawConfirm(ctx: CanvasRenderingContext2D): void {
+    ctx.fillStyle = 'rgba(10, 20, 40, 0.6)';
+    ctx.fillRect(0, 0, W, 720);
+    panel(ctx, W / 2 - 380, 190, 760, 370, 30, 'rgba(255,255,255,0.97)', PALETTE.red, 6);
+    text(ctx, '↺ Chơi lại từ đầu?', W / 2, 250, { size: 44, color: PALETTE.red });
+    text(ctx, 'Xóa hết KN, các màn đã mở và các bài đã học.', W / 2, 315, { size: 26, color: PALETTE.ink, weight: 700 });
+    text(ctx, 'Green sẽ trở lại làm nòng nọc.', W / 2, 360, { size: 26, color: PALETTE.ink, weight: 700 });
+    this.confirmYes.draw(ctx);
+    this.confirmNo.draw(ctx);
   }
 }

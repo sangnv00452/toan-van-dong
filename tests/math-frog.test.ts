@@ -147,6 +147,22 @@ describe('KN and ranks', () => {
     expect(again.muted).toBe(true);
   });
 
+  it('starts over but keeps the music setting', () => {
+    const data = new Map<string, string>();
+    const store: KeyValueStore = { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v) };
+    const p = new Progress(store);
+    p.addXp(700);
+    p.markCleared('lily-jump', 1, 4);
+    p.saveLesson('motion-speed', 4);
+    p.muted = true;
+    p.reset();
+    const again = new Progress(store);
+    expect(again.xp).toBe(0);
+    expect(again.clearedUpTo('lily-jump', 1)).toBe(0);
+    expect(again.lessonBest('motion-speed')).toBeNull();
+    expect(again.muted).toBe(true);
+  });
+
   it('takes KN away without going below 0 and reports a lower rank', () => {
     const p = new Progress(null);
     p.addXp(103);

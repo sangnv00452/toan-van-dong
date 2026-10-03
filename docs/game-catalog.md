@@ -56,3 +56,4 @@ Mỗi trò có 3 mức **Dễ, Vừa, Khó**, mỗi mức có **5 màn**. Chọn
 - Green **lớn lên theo hạng**: hạng càng cao ếch càng to, tụt hạng thì ếch bé lại. Ở hạng Nòng nọc, Green là **con nòng nọc**; đủ 100 KN thì hóa thành ếch. Mỗi lần đổi hạng có hiệu ứng biến hình và Green nói ra điều đó. (Trong 3 trò camera, Green vẫn giữ hình ếch để còn nhảy và thè lưỡi.)
 - Hạng: 💧 Nòng nọc (0) → 🌱 Ếch con (100) → 🍀 Ếch xanh (300) → 🥈 Ếch bạc (600) → 🥇 Ếch vàng (1000) → 👑 Vua ếch (1600 KN). Muốn đổi tên hạng thì sửa trong `src/core/progress.ts`.
 - KN, các màn đã qua và các chủ đề đã học chỉ được lưu **trên máy tính đang dùng**, không gửi đi đâu.
+- Muốn chơi lại từ đầu (ví dụ giữa các lượt giám khảo chơi thử): bấm **↺ Chơi lại từ đầu** ở trang chủ rồi chọn **Xóa, chơi lại**. Cài đặt nhạc được giữ nguyên.

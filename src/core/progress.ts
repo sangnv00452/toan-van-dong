@@ -113,6 +113,12 @@ export class Progress {
     return rankIndex(this.data.xp) - before;
   }
 
+  /** Start over: clears KN, cleared levels and finished lessons (keeps the music setting). */
+  reset(): void {
+    this.data = { xp: 0, cleared: {}, lessons: {}, muted: this.data.muted };
+    this.save();
+  }
+
   clearedUpTo(gameId: string, difficulty: number): number {
     return this.data.cleared[`${gameId}:${difficulty}`] ?? 0;
   }
