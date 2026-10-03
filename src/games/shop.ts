@@ -117,11 +117,11 @@ class ShopRound extends BaseRound {
 
 export const shopGame: GameDef = {
   id: 'shop',
-  title: 'Siêu Thị Tí Hon',
-  icon: '🛒',
+  title: 'Ếch Đi Chợ',
+  icon: '🧺',
   topic: 'Tiền Việt Nam, cộng nhẩm',
   grades: 'Lớp 2–5',
-  howTo: 'Chạm vào món hàng để bỏ vào giỏ. Mua sao cho hết ĐÚNG số tiền đề bài. Quá tiền thì phải mua lại!',
+  howTo: 'Ếch Green đi chợ! Chạm vào món hàng để bỏ vào giỏ. Mua sao cho hết ĐÚNG số tiền đề bài. Quá tiền thì phải mua lại!',
   levels: ['Giá tròn nghìn, 2 món', 'Giá lẻ 500 đ, 2–3 món', 'Giá lẻ 100 đ, 3 món'],
   duration: 90,
   versus: false,

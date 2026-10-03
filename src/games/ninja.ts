@@ -182,11 +182,11 @@ class NinjaRound extends BaseRound {
 
 export const ninjaGame: GameDef = {
   id: 'ninja',
-  title: 'Ninja Chém Phân Số',
+  title: 'Ếch Ninja Phân Số',
   icon: '🥷',
   topic: 'Phân số bằng nhau',
   grades: 'Lớp 4–5',
-  howTo: 'Trái cây bay lên mang phân số. Vung tay thật nhanh qua quả BẰNG phân số đề bài. Chém nhầm bị trừ điểm!',
+  howTo: 'Trái cây bay lên mang phân số. Cùng ếch ninja Green vung tay thật nhanh qua quả BẰNG phân số đề bài. Chém nhầm bị trừ điểm!',
   levels: ['Bằng 1/2', 'Bằng 1/3, 2/3, 1/4, 3/4', 'Phân số khó hơn'],
   duration: 60,
   versus: true,

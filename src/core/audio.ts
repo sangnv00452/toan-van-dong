@@ -5,6 +5,11 @@
 export class Sfx {
   private ctx: AudioContext | null = null;
 
+  /** Shared with the background music; null until `unlock()`. */
+  get context(): AudioContext | null {
+    return this.ctx;
+  }
+
   unlock(): void {
     if (!this.ctx) this.ctx = new AudioContext();
     void this.ctx.resume();

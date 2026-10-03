@@ -67,11 +67,12 @@ class CompareRound extends BaseRound {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    this.banner(ctx, 'Bên nào LỚN HƠN? Giơ tay chạm vào bên đó!');
+    this.banner(ctx, 'Lá sen nào LỚN HƠN? Giơ tay chạm vào bên đó!');
     for (const s of this.sides) {
       const { x, y, w, h } = s.rect;
       panel(ctx, x, y, w, h, 28, s.flash ?? 'rgba(255,255,255,0.88)', s.isLeft ? PALETTE.blue : PALETTE.orange, 8);
-      emoji(ctx, s.isLeft ? '👈' : '👉', x + w / 2, y + 48, 48);
+      emoji(ctx, '🪷', x + w / 2 + (s.isLeft ? -40 : 40), y + 48, 44);
+      emoji(ctx, s.isLeft ? '👈' : '👉', x + w / 2 + (s.isLeft ? 20 : -20), y + 48, 44);
       const label = s.isLeft ? this.q.left : this.q.right;
       value(ctx, label, x + w / 2, y + h / 2 + 30, Math.min(84, w / 3.2), s.flash ? PALETTE.white : PALETTE.ink, null, w - 40);
     }
@@ -91,11 +92,11 @@ class CompareRound extends BaseRound {
 
 export const compareGame: GameDef = {
   id: 'compare',
-  title: 'Trái Hay Phải?',
-  icon: '🆚',
+  title: 'Lá Sen Nào Lớn Hơn?',
+  icon: '🪷',
   topic: 'So sánh số, phân số, đơn vị',
   grades: 'Lớp 3–5',
-  howTo: 'Hai bên màn hình có hai giá trị. Giơ tay chạm vào bên LỚN HƠN. Cẩn thận với 3,5 và 3,45 nhé!',
+  howTo: 'Ếch Green muốn nhảy sang lá sen LỚN HƠN. Giơ tay chạm vào bên có giá trị lớn hơn. Cẩn thận với 3,5 và 3,45 nhé!',
   levels: ['Số có 4 chữ số', 'Số thập phân, phân số', 'Đổi đơn vị đo'],
   duration: 60,
   versus: true,

@@ -1,5 +1,6 @@
 import { H, PALETTE } from '../config';
 import { text } from '../core/draw';
+import { drawFrog } from '../core/frog-art';
 import type { Pointer } from '../core/input';
 import { arithmeticQuestion, type ChoiceQuestion } from '../math/arithmetic';
 import { randInt, shuffle } from '../math/random';
@@ -20,7 +21,7 @@ interface Bubble {
   gone: boolean;
 }
 
-/** Three answer bubbles float up; touch the one with the right answer. */
+/** Green blows three answer bubbles that float up; touch the one with the right answer. */
 class BubblesRound extends BaseRound {
   private q!: ChoiceQuestion;
   private bubbles: Bubble[] = [];
@@ -98,26 +99,21 @@ class BubblesRound extends BaseRound {
       ctx.lineWidth = 4;
       ctx.strokeStyle = 'rgba(255,255,255,0.9)';
       ctx.stroke();
-      // Little knot + string so it reads as a balloon.
-      ctx.beginPath();
-      ctx.moveTo(b.x, b.y + this.radius);
-      ctx.quadraticCurveTo(b.x + 12, b.y + this.radius + 30, b.x, b.y + this.radius + 60);
-      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
       text(ctx, String(b.value), b.x, b.y + 2, { size: this.radius * 0.72, outline: PALETTE.ink });
     }
+    const r = this.region;
+    drawFrog(ctx, r.x + 90, H - 70, 0.7, { mood: 'eat', look: 0.6 });
     this.banner(ctx, this.q.text);
   }
 }
 
 export const bubblesGame: GameDef = {
   id: 'bubbles',
-  title: 'Bắt Bong Bóng',
-  icon: '🎈',
+  title: 'Ếch Thổi Bong Bóng',
+  icon: '🫧',
   topic: 'Cộng, trừ, nhân, chia',
   grades: 'Lớp 2–5',
-  howTo: 'Ba quả bóng bay lên, mỗi quả mang một số. Đưa tay chạm vào quả bóng có đáp án đúng!',
+  howTo: 'Ếch Green thổi ra ba bong bóng, mỗi quả mang một số. Đưa tay chạm vào bong bóng có đáp án đúng!',
   levels: ['Cộng trừ trong 100', 'Bảng nhân 2–9', 'Nhân, chia, số có 2 chữ số'],
   duration: 60,
   versus: true,

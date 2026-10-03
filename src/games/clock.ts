@@ -77,10 +77,10 @@ class ClockRound extends BaseRound {
     const { cxClock: cx, cyClock: cy, R } = this;
     ctx.beginPath();
     ctx.arc(cx, cy, R, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.fillStyle = 'rgba(232, 248, 233, 0.96)';
     ctx.fill();
     ctx.lineWidth = 14;
-    ctx.strokeStyle = PALETTE.purple;
+    ctx.strokeStyle = '#2e7d32';
     ctx.stroke();
     for (let i = 0; i < 60; i++) {
       const a = (i / 60) * Math.PI * 2;
@@ -127,11 +127,11 @@ class ClockRound extends BaseRound {
 
 export const clockGame: GameDef = {
   id: 'clock',
-  title: 'Đồng Hồ Khổng Lồ',
+  title: 'Đồng Hồ Lá Sen',
   icon: '⏰',
   topic: 'Xem giờ, thời gian',
   grades: 'Lớp 2–3',
-  howTo: 'Đọc câu hỏi bên trái rồi chạm vào số mà kim đồng hồ chỉ. Kim NGẮN màu xanh là kim giờ, kim DÀI màu đỏ là kim phút.',
+  howTo: 'Ếch Green hỏi giờ! Đọc câu hỏi bên trái rồi chạm vào số mà kim đồng hồ chỉ. Kim NGẮN màu xanh là kim giờ, kim DÀI màu đỏ là kim phút.',
   levels: ['Kim ngắn, giờ đúng', 'Kim dài, giờ buổi chiều', 'Thời gian trôi qua'],
   duration: 90,
   versus: false,

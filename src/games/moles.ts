@@ -20,7 +20,7 @@ interface Mole {
   touch: TouchTracker;
 }
 
-/** Moles pop up with numbers; whack only those that follow the rule. */
+/** Ladybugs pop up from the pond with numbers; Green catches only those that follow the rule. */
 class MolesRound extends BaseRound {
   private rule: DivRule;
   private ruleTimer = 0;
@@ -103,7 +103,7 @@ class MolesRound extends BaseRound {
       // Hole
       ctx.beginPath();
       ctx.ellipse(m.x, m.y, R * 1.1, R * 0.38, 0, 0, Math.PI * 2);
-      ctx.fillStyle = '#3b2a1e';
+      ctx.fillStyle = '#1b4d3e';
       ctx.fill();
       const rise = this.rise(m);
       if (rise > 0) {
@@ -119,16 +119,26 @@ class MolesRound extends BaseRound {
       ctx.beginPath();
       ctx.ellipse(m.x, m.y, R * 1.1, R * 0.38, 0, 0, Math.PI);
       ctx.lineWidth = 10;
-      ctx.strokeStyle = '#6b4f3a';
+      ctx.strokeStyle = '#43a047';
       ctx.stroke();
     }
-    this.banner(ctx, `Chỉ đập ${this.rule.label}!`);
+    this.banner(ctx, `Chỉ bắt bọ mang ${this.rule.label}!`);
   }
 
   private drawMole(ctx: CanvasRenderingContext2D, m: Mole, x: number, y: number, R: number): void {
+    // Ladybug: red shell with black spots and a black head
     ctx.beginPath();
     ctx.ellipse(x, y, R * 0.8, R * 0.95, 0, 0, Math.PI * 2);
-    ctx.fillStyle = PALETTE.brown;
+    ctx.fillStyle = '#e53935';
+    ctx.fill();
+    ctx.fillStyle = PALETTE.ink;
+    for (const [dx, dy] of [[-0.45, -0.1], [0.45, -0.1], [-0.5, 0.55], [0.5, 0.55]]) {
+      ctx.beginPath();
+      ctx.arc(x + dx * R, y + dy * R, R * 0.12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.ellipse(x, y - R * 0.62, R * 0.5, R * 0.36, 0, 0, Math.PI * 2);
     ctx.fill();
     // Eyes (crosses when hit)
     ctx.fillStyle = PALETTE.ink;
@@ -150,10 +160,6 @@ class MolesRound extends BaseRound {
         ctx.fill();
       }
     }
-    ctx.beginPath();
-    ctx.arc(x, y - R * 0.22, 8, 0, Math.PI * 2);
-    ctx.fillStyle = PALETTE.pink;
-    ctx.fill();
     // Number sign on the belly
     const signColor = m.state === 'hit' ? (m.good ? PALETTE.green : PALETTE.red) : PALETTE.white;
     panel(ctx, x - R * 0.62, y - R * 0.02, R * 1.24, R * 0.62, 12, signColor, PALETTE.ink, 3);
@@ -163,15 +169,15 @@ class MolesRound extends BaseRound {
 
 export const molesGame: GameDef = {
   id: 'moles',
-  title: 'Đập Chuột Chia Hết',
-  icon: '🔨',
+  title: 'Ếch Bắt Bọ Chia Hết',
+  icon: '🐞',
   topic: 'Chẵn lẻ, dấu hiệu chia hết',
   grades: 'Lớp 1–4',
-  howTo: 'Chuột trồi lên mang theo số. Chỉ đập con chuột có số đúng luật! Đập nhầm bị trừ điểm. Cứ 20 giây luật lại đổi.',
+  howTo: 'Bọ rùa trồi lên mang theo số. Giúp ếch Green chỉ bắt con bọ có số đúng luật! Bắt nhầm bị trừ điểm. Cứ 20 giây luật lại đổi.',
   levels: ['Số chẵn, số lẻ', 'Chia hết cho 2, 5, 10', 'Chia hết cho 3, 9'],
   duration: 60,
   versus: true,
   stars: [6, 12, 18],
-  color: PALETTE.brown,
+  color: '#c62828',
   create: (rc) => new MolesRound(rc),
 };

@@ -156,11 +156,11 @@ class ScaleRound extends BaseRound {
 
 export const scaleGame: GameDef = {
   id: 'scale',
-  title: 'Cân Thăng Bằng',
+  title: 'Ếch Cân Hàng',
   icon: '⚖️',
   topic: 'Khối lượng, đổi kg và g',
   grades: 'Lớp 3–5',
-  howTo: 'Chiếc hộp bên trái nặng bao nhiêu? Chạm các nút quả cân bên phải để thêm vào đĩa cho đến khi cân thăng bằng.',
+  howTo: 'Ếch Green cần biết chiếc hộp bên trái nặng bao nhiêu. Chạm các nút quả cân bên phải để thêm vào đĩa cho đến khi cân thăng bằng.',
   levels: ['Số kg tròn', 'Ki-lô-gam và gam', 'Viết bằng g, số thập phân'],
   duration: 90,
   versus: false,

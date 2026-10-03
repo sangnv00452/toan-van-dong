@@ -4,6 +4,8 @@ import { Camera } from './core/camera';
 import { panel, text } from './core/draw';
 import { HandTracker } from './core/hand-tracker';
 import { InputManager } from './core/input';
+import { Music } from './core/music';
+import { Progress } from './core/progress';
 import { SplashScene } from './scenes/splash-scene';
 
 export interface Scene {
@@ -11,12 +13,14 @@ export interface Scene {
   draw(ctx: CanvasRenderingContext2D): void;
 }
 
-/** Owns the canvas, camera, hand tracker, input and the current screen. */
+/** Owns the canvas, camera, hand tracker, input, sound, saved progress and the current screen. */
 export class App {
   readonly ctx: CanvasRenderingContext2D;
   readonly camera = new Camera();
   readonly tracker = new HandTracker();
   readonly sfx = new Sfx();
+  readonly music = new Music(this.sfx);
+  readonly progress = new Progress();
   readonly input: InputManager;
   private scene: Scene;
   private last = 0;
@@ -72,14 +76,14 @@ export class App {
 
   private drawBackground(ctx: CanvasRenderingContext2D): void {
     const g = ctx.createLinearGradient(0, 0, W, H);
-    g.addColorStop(0, '#4cc9f0');
-    g.addColorStop(1, '#7209b7');
+    g.addColorStop(0, '#7fd3d8');
+    g.addColorStop(1, '#1f6f8b');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
     if (this.camera.ready) {
       this.camera.draw(ctx);
       // Soft tint keeps the player visible but lets the game graphics stand out.
-      ctx.fillStyle = 'rgba(20, 30, 70, 0.35)';
+      ctx.fillStyle = 'rgba(10, 60, 50, 0.35)';
       ctx.fillRect(0, 0, W, H);
     }
   }

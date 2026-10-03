@@ -3,6 +3,7 @@ import { H, type Level, PALETTE, W } from '../config';
 import { DwellButton } from '../core/dwell-button';
 import { emoji, panel, text } from '../core/draw';
 import { Effects } from '../core/effects';
+import { xpFor } from '../core/progress';
 import type { GameDef } from '../games/types';
 import { MenuScene } from './menu-scene';
 import { PlayScene } from './play-scene';
@@ -15,6 +16,9 @@ export class ResultScene implements Scene {
   private readonly again: DwellButton;
   private readonly menu: DwellButton;
   private confettiTimer = 0;
+  /** KN earned this game: 10 per point, for every player at this computer. */
+  private readonly xp: number;
+  private readonly rankUp: boolean;
 
   constructor(
     private readonly app: App,
@@ -26,6 +30,8 @@ export class ResultScene implements Scene {
     this.again = new DwellButton({ x: W / 2 - 440, y: 540, w: 420, h: 110 }, '↻ Chơi lại', { color: PALETTE.green, size: 40, dwell: 1.0 });
     this.menu = new DwellButton({ x: W / 2 + 20, y: 540, w: 420, h: 110 }, '☰ Chọn trò khác', { color: PALETTE.blue, size: 40, dwell: 1.0 });
     this.fx.confetti(W / 2, H);
+    this.xp = xpFor(scores.reduce((sum, s) => sum + s, 0));
+    this.rankUp = app.progress.addXp(this.xp);
   }
 
   private stars(score: number): number {
@@ -70,6 +76,8 @@ export class ResultScene implements Scene {
       const verdict = a === b ? '🤝 Hòa nhau – cả hai đều giỏi!' : `🏆 NGƯỜI ${a > b ? 1 : 2} chiến thắng!`;
       text(ctx, verdict, W / 2, 430, { size: 46, color: PALETTE.purple });
     }
+    const kn = `+${this.xp} KN cho ếch Green${this.rankUp ? ' · ⬆ Lên hạng mới!' : ''}`;
+    text(ctx, kn, W / 2, 485, { size: 26, color: PALETTE.green, weight: 700 });
     this.again.draw(ctx);
     this.menu.draw(ctx);
     this.fx.draw(ctx);

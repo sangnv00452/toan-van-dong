@@ -168,11 +168,11 @@ function drawSpec(ctx: CanvasRenderingContext2D, spec: BallSpec, x: number, y: n
 
 export const goalkeeperGame: GameDef = {
   id: 'goalkeeper',
-  title: 'Thủ Môn Hình Học',
+  title: 'Ếch Thủ Môn Hình Học',
   icon: '🧤',
   topic: 'Góc, hình, chu vi, diện tích',
   grades: 'Lớp 3–5',
-  howTo: 'Bóng bay về phía khung thành. Chỉ chặn bóng ĐÚNG yêu cầu (viền vàng là chặn được). Chặn nhầm bị trừ điểm!',
+  howTo: 'Ếch Green làm thủ môn! Bóng bay về phía khung thành. Chỉ chặn bóng ĐÚNG yêu cầu (viền vàng là chặn được). Chặn nhầm bị trừ điểm!',
   levels: ['Góc nhọn, vuông, tù', 'Nhận dạng hình', 'Chu vi, diện tích'],
   duration: 60,
   versus: true,

@@ -34,6 +34,8 @@ export class InputManager {
   click: { x: number; y: number } | null = null;
   /** A key was pressed this frame. */
   key = false;
+  /** `KeyboardEvent.key` values pressed this frame (for typing answers). */
+  keys: string[] = [];
 
   private hands: TrackedHand[] = [];
   private nextId = 1;
@@ -45,6 +47,7 @@ export class InputManager {
   private mouseMovedAt = -Infinity;
   private pendingClick: { x: number; y: number } | null = null;
   private pendingKey = false;
+  private pendingKeys: string[] = [];
 
   constructor(private readonly canvas: HTMLCanvasElement) {
     canvas.addEventListener('pointermove', (e) => this.onMouse(e));
@@ -53,7 +56,10 @@ export class InputManager {
       this.pendingClick = this.toLogical(e);
     });
     canvas.addEventListener('pointerleave', () => (this.mouseInside = false));
-    window.addEventListener('keydown', () => (this.pendingKey = true));
+    window.addEventListener('keydown', (e) => {
+      this.pendingKey = true;
+      this.pendingKeys.push(e.key);
+    });
   }
 
   get handCount(): number {
@@ -78,6 +84,8 @@ export class InputManager {
     this.pendingClick = null;
     this.key = this.pendingKey;
     this.pendingKey = false;
+    this.keys = this.pendingKeys;
+    this.pendingKeys = [];
 
     if (tips) {
       this.matchHands(tips);

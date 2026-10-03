@@ -1,5 +1,6 @@
 import { PALETTE } from '../config';
 import { emoji, panel, text } from '../core/draw';
+import { drawFrog } from '../core/frog-art';
 import type { Pointer } from '../core/input';
 import { shuffle } from '../math/random';
 import { sequenceQuestion, type SequenceQuestion } from '../math/sequences';
@@ -112,7 +113,7 @@ class StairsRound extends BaseRound {
     const lower = Math.floor(k);
     const hop = Math.sin((k - lower) * Math.PI) * 40;
     const cy = this.stepY(lower) + (this.stepY(Math.min(3, lower + 1)) - this.stepY(lower)) * (k - lower);
-    emoji(ctx, '🧒', this.stepX(0) + k * STEP_W, cy - 45 - hop, 70);
+    drawFrog(ctx, this.stepX(0) + k * STEP_W, cy - 40 - hop, 0.55, { mood: 'happy', look: 0.8 });
     // Tiles
     for (const t of this.tiles) {
       if (t.used) continue;
@@ -131,11 +132,11 @@ class StairsRound extends BaseRound {
 
 export const stairsGame: GameDef = {
   id: 'stairs',
-  title: 'Bậc Thang Quy Luật',
+  title: 'Ếch Leo Bậc Quy Luật',
   icon: '🪜',
   topic: 'Dãy số có quy luật',
   grades: 'Lớp 1–4',
-  howTo: 'Nhìn 3 số đầu, tìm quy luật. Chạm lần lượt 3 số tiếp theo để bạn nhỏ leo lên đỉnh cầu thang!',
+  howTo: 'Nhìn 3 số đầu, tìm quy luật. Chạm lần lượt 3 số tiếp theo để ếch Green nhảy lên đỉnh cầu thang!',
   levels: ['Đếm thêm 2, 3, 5, 10', 'Cộng, trừ đều, gấp đôi', 'Khoảng cách tăng dần, gấp ba'],
   duration: 90,
   versus: false,
