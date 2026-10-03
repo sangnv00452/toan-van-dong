@@ -26,7 +26,7 @@ npm run build      # tự chép thư viện và tải mô hình nhận diện ta
 ## Dành cho người phát triển
 ```bash
 npm run dev        # chạy thử, tự tải lại khi sửa code (http://localhost:5173)
-npm test           # 34 bài kiểm thử tự động cho phần sinh đề toán
+npm test           # kiểm thử tự động: đề toán, nội dung bài học, KN và hạng
 npm run typecheck
 ```
 

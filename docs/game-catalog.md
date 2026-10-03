@@ -1,32 +1,56 @@
-# Danh sách trò chơi – Toán Vận Động
+# Math Frog – các phần và trò chơi
 
-Có 9 trò, mỗi trò một **dạng toán** và một **kiểu vận động** khác nhau. Trò nào cũng có 3 mức. Mã nguồn của từng trò nằm trong `src/games/`, phần sinh câu hỏi nằm trong `src/math/`.
+Ý tưởng do hai bạn trong đội mô tả: [game-ideas/01-math-frog.md](./game-ideas/01-math-frog.md).
 
-| # | Trò chơi | Dạng toán (Dễ · Vừa · Khó) | Lớp | Kiểu vận động | Thời gian | 2 người |
-|---|---|---|---|---|---|---|
-| 1 | 🎈 **Bắt Bong Bóng** | Cộng trừ trong 100 · Bảng nhân 2–9 · Nhân, chia, số có 2 chữ số | 2–5 | Chạm vào bóng đang bay lên | 60 s | ✓ |
-| 2 | 🆚 **Trái Hay Phải?** | Số có 4 chữ số · Số thập phân, phân số · Đổi đơn vị đo | 3–5 | Giơ tay sang bên lớn hơn | 60 s | ✓ |
-| 3 | 🔨 **Đập Chuột Chia Hết** | Chẵn/lẻ · Chia hết cho 2, 5, 10 · Chia hết cho 3, 9 | 1–4 | Phản xạ nhanh, đập nhầm bị trừ điểm; 20 giây đổi luật một lần | 60 s | ✓ |
-| 4 | 🛒 **Siêu Thị Tí Hon** | Giá tròn nghìn · Giá lẻ 500 đ · Giá lẻ 100 đ | 2–5 | Chọn nhiều món cho đủ **đúng** một số tiền | 90 s | – |
-| 5 | 🥷 **Ninja Chém Phân Số** | Bằng 1/2 · Bằng 1/3, 2/3, 1/4, 3/4 · Phân số khó hơn | 4–5 | **Vung tay thật nhanh** để chém quả bay theo đường cong | 60 s | ✓ |
-| 6 | 🧤 **Thủ Môn Hình Học** | Góc nhọn/vuông/tù · Nhận dạng hình · Chu vi, diện tích | 3–5 | Chặn bóng đúng, để lọt bóng sai | 60 s | ✓ |
-| 7 | ⏰ **Đồng Hồ Khổng Lồ** | Kim ngắn giờ đúng · Kim dài, giờ buổi chiều · Thời gian trôi qua | 2–3 | Chạm số quanh mặt đồng hồ | 90 s | – |
-| 8 | 🪜 **Bậc Thang Quy Luật** | Đếm thêm · Cộng/trừ đều, gấp đôi · Khoảng cách tăng dần, gấp ba | 1–4 | Chạm 3 số tiếp theo **đúng thứ tự** | 90 s | – |
-| 9 | ⚖️ **Cân Thăng Bằng** | Số kg tròn · kg và g · Viết bằng g hoặc số thập phân | 3–5 | Thêm hoặc bớt quả cân đến khi cân thẳng | 90 s | – |
+## Trang chủ
+Một cái hồ, ếch Green ngồi trên lá sen, có nhạc nền nhẹ (nút bật/tắt). Góc trên bên trái hiện **hạng** và **điểm kinh nghiệm (KN)**. Góc bên phải có hai phần **Luyện tập** và **Học**.
 
-## Điểm và sao
-- Mỗi câu đúng được **+1**. Ở trò 3, 5, 6, làm nhầm bị **−1**, nhưng điểm không xuống dưới 0.
-- Hết giờ thì hiện điểm và **1–3 ngôi sao**. Mốc điểm để được sao khai báo trong `stars` của từng trò.
-- Chế độ 2 người: chia đôi màn hình, NGƯỜI 1 đứng bên trái, NGƯỜI 2 đứng bên phải. Mỗi bạn có đề riêng và điểm riêng.
+## Phần Học (không cần camera)
+Ếch thầy giáo giảng lý thuyết → ví dụ giải từng bước → bài tập **nhập đáp án** (gõ bằng bàn phím, bấm chuột, hoặc giữ tay trên bàn phím số trên màn hình). Làm xong chủ đề thì được KN.
 
-## Những "bẫy" cố ý để học sinh phải nghĩ
-- Bong bóng: các đáp án sai là lỗi hay gặp, ví dụ nhầm sang hàng khác trong bảng nhân (7 × 8 với 7 × 9).
-- Trái Hay Phải: 3,5 so với 3,45 (số nhiều chữ số hơn chưa chắc đã lớn hơn); 1 km 50 m so với 1 500 m.
-- Ninja: 3/6 (bằng 1/2) và 3/7 (không bằng) trông rất giống nhau.
-- Thủ Môn mức Vừa: không bao giờ trộn hình vuông với hình chữ nhật trong cùng một lượt, vì hình vuông cũng là một hình chữ nhật đặc biệt.
-- Siêu Thị: số tiền đề bài luôn là tổng giá của một vài món có trên kệ, nên lúc nào cũng có lời giải.
+| Chương | Chủ đề |
+|---|---|
+| 1. 🔢 Số thập phân | Số thập phân là gì? · Cộng, trừ · Nhân, chia |
+| 2. 💯 Tỉ số phần trăm | Tỉ số phần trăm là gì? · Tìm phần trăm của một số · Tìm một số khi biết phần trăm |
+| 3. 📐 Hình học | Diện tích tam giác · Diện tích hình thang · Hình tròn · Thể tích hình hộp |
+| 4. 🚲 Thời gian và chuyển động | Số đo thời gian · Vận tốc · Quãng đường và thời gian |
 
-## Thêm nội dung (không cần biết lập trình)
-- Câu đổi đơn vị: `src/data/unit-comparisons.ts`. Mỗi dòng gồm chữ hai bên và giá trị đã đổi về cùng một đơn vị.
-- Món hàng siêu thị: `src/data/shop-items.ts`. Mỗi dòng gồm biểu tượng, tên món, giá thấp nhất và giá cao nhất.
-- Sửa xong thì chạy `npm test` để máy tự kiểm tra (ví dụ hai bên không được bằng nhau), rồi chạy `npm run build`.
+Nội dung nằm trong `src/data/lessons.ts`. Hai bạn sửa hoặc thêm câu ở đó rồi chạy `npm test`, máy sẽ kiểm tra đáp án có viết đúng kiểu số hay không.
+
+## Phần Luyện tập (dùng camera)
+### 3 trò Math Frog
+Mỗi trò có 3 mức **Dễ, Vừa, Khó**, mỗi mức có **5 màn**. Qua màn này mới mở màn sau. Màn 1–4 luyện mỗi màn một dạng toán, màn 5 trộn cả 4 dạng.
+
+| Trò | Cách chơi | Thử thách mỗi màn |
+|---|---|---|
+| 🍎 **Ếch Ăn Táo** | Táo ghi số rơi xuống; di chuyển tay vào quả ghi đáp án đúng để ếch ăn | Ăn đủ số táo đúng trước khi hết giờ (60/75/90 giây) |
+| 🪷 **Nhảy Lá Sen** | Mặt hồ trôi sang trái; chạm lá sen ghi đáp án đúng để ếch nhảy sang. Sai hoặc chậm quá là ếch rơi xuống nước, phải chơi lại | Nhảy đúng đủ số lá liên tiếp; màn sau hồ trôi nhanh hơn |
+| 🧊 **Táo Băng** | Các quả táo trông giống nhau; chạm quả đúng thì ếch ăn táo đỏ, chạm sai thì ếch ăn nhầm táo đóng băng và bị đông cứng một lúc | Ăn đủ số táo đỏ, không bị đóng băng 3 lần |
+
+| Mức | Màn 1 | Màn 2 | Màn 3 | Màn 4 |
+|---|---|---|---|---|
+| Dễ | Cộng số thập phân | Trừ số thập phân | Nhân, chia với 10, 100 | Phân số thập phân |
+| Vừa | Nhân số thập phân | Chia số thập phân | Tỉ số phần trăm | Đổi đơn vị đo |
+| Khó | Diện tích tam giác | Diện tích hình thang | Chuyển động đều | Thể tích hình hộp |
+
+Đề do máy tạo ngẫu nhiên (`src/math/grade5.ts`). Đáp án sai là những lỗi hay gặp, ví dụ đặt sai dấu phẩy, quên chia 2 khi tính diện tích tam giác.
+
+### 9 trò chơi khác của Green
+Đây là 9 trò cũ, đã đổi sang chủ đề ếch. Mỗi trò có 3 mức. Trò 1, 2, 3, 5, 6 chơi được **2 người đấu** (chia đôi màn hình).
+
+| # | Trò | Dạng toán (Dễ · Vừa · Khó) |
+|---|---|---|
+| 1 | 🫧 Ếch Thổi Bong Bóng | Cộng trừ trong 100 · Bảng nhân · Nhân, chia |
+| 2 | 🪷 Lá Sen Nào Lớn Hơn? | Số có 4 chữ số · Số thập phân, phân số · Đổi đơn vị |
+| 3 | 🐞 Ếch Bắt Bọ Chia Hết | Chẵn/lẻ · Chia hết cho 2, 5, 10 · Chia hết cho 3, 9 |
+| 4 | 🧺 Ếch Đi Chợ | Tiền Việt Nam, cộng nhẩm |
+| 5 | 🥷 Ếch Ninja Phân Số | Phân số bằng nhau (vung tay thật nhanh để chém) |
+| 6 | 🧤 Ếch Thủ Môn Hình Học | Góc · Nhận dạng hình · Chu vi, diện tích |
+| 7 | ⏰ Đồng Hồ Lá Sen | Xem giờ, thời gian trôi qua |
+| 8 | 🪜 Ếch Leo Bậc Quy Luật | Dãy số có quy luật |
+| 9 | ⚖️ Ếch Cân Hàng | Khối lượng, đổi kg và g |
+
+## Điểm kinh nghiệm (KN) và hạng
+- Mỗi câu đúng được **10 KN**, ở cả phần Học lẫn phần Luyện tập. Qua một màn Math Frog được thêm **20 KN**.
+- Hạng: 💧 Nòng nọc (0) → 🌱 Ếch con (100) → 🍀 Ếch xanh (300) → 🥈 Ếch bạc (600) → 🥇 Ếch vàng (1000) → 👑 Vua ếch (1600 KN). Muốn đổi tên hạng thì sửa trong `src/core/progress.ts`.
+- KN, các màn đã qua và các chủ đề đã học chỉ được lưu **trên máy tính đang dùng**, không gửi đi đâu.

@@ -1,6 +1,6 @@
 # Kế hoạch: Toán Vận Động – website trò chơi học toán bằng camera
 
-**Trạng thái:** Website đã hoàn thành 9 trò, chế độ 2 người và chạy được khi mất mạng; chờ thử với camera thật và tập dượt · **Đội:** 2 học sinh lớp 5
+**Trạng thái:** Đã thay bằng [kế hoạch Math Frog](../261003-1924-math-frog/plan.md) (03/10). 9 trò trong kế hoạch này vẫn còn, đã đổi sang chủ đề ếch. · **Đội:** 2 học sinh lớp 5
 **Tài liệu:** [ý tưởng](../../docs/product-idea.md) · [danh sách trò](../../docs/game-catalog.md) · [cách hoạt động](../../docs/how-it-works.md) · [chạy](../../docs/run-guide.md) · [thuyết trình](../../docs/pitch-and-qa.md)
 
 ## Đã làm (03/10)
