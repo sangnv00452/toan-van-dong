@@ -8,7 +8,17 @@ npm install
 npm run build      # tự chép thư viện và tải mô hình nhận diện tay vào public/mediapipe
 ```
 
-## Chạy khi KHÔNG có mạng (ở phòng thi)
+## Bản đóng gói cho máy thi (không cần Node, không cần mạng)
+Dùng khi máy thi **không cài Node.js** hoặc không có mạng.
+
+1. Trên máy phát triển, chạy `npm run package:local`. Lệnh này build rồi tạo file **`release/MathFrog-local.zip`** (khoảng 12 MB).
+2. Chép file zip sang máy thi (USB hoặc Zalo), **giải nén** ra một thư mục.
+3. Nhấp đúp **`CHAY-MATH-FROG.bat`**. Một máy chủ web nhỏ bằng PowerShell (có sẵn trong Windows 10/11) sẽ chạy trên `http://localhost:4173`, rồi Chrome hoặc Edge tự mở trang.
+4. Giữ cửa sổ đen mở trong lúc chơi; chơi xong thì đóng cửa sổ đó. Trong zip có file `HUONG-DAN.txt` hướng dẫn và cách xử lý sự cố.
+
+Mã nguồn của bộ đóng gói: `scripts/package-local.mjs` và `scripts/local-package/` (máy chủ `serve-local.ps1`, file hướng dẫn). Thư mục `release/` không được đưa lên git.
+
+## Chạy khi KHÔNG có mạng trên máy đã cài Node (máy phát triển)
 - Nhấp đúp file **`start-offline.bat`**. Hoặc chạy lệnh `npm run offline`.
 - Trình duyệt tự mở địa chỉ `http://localhost:4173`.
 - Lần đầu trình duyệt hỏi quyền camera thì bấm **Cho phép (Allow)**.

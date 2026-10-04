@@ -1,0 +1,23 @@
+MATH FROG - BAN CHAY TREN MAY (KHONG CAN INTERNET)
+=====================================================
+
+CÁCH CHẠY
+1. Giải nén file zip ra một thư mục (ví dụ Desktop). KHÔNG chạy thẳng trong file zip.
+2. Nhấp đúp file  CHAY-MATH-FROG.bat
+3. Một cửa sổ đen hiện ra, rồi Chrome (hoặc Edge) tự mở trang  http://localhost:4173
+4. Lần đầu trình duyệt hỏi quyền dùng camera: bấm "Cho phép" (Allow).
+5. Giữ cửa sổ đen MỞ trong lúc chơi. Chơi xong thì đóng cửa sổ đen.
+
+Trang hình động giải thích hệ thống (cho giám khảo):
+   http://localhost:4173/presentation/giai-thich-he-thong.html
+
+KHÔNG CẦN CÀI GÌ THÊM
+- Không cần Internet, không cần cài Node.js. Chỉ cần Windows 10/11 có Chrome hoặc Edge và webcam.
+- Không có camera thì vẫn chơi được bằng chuột.
+
+XỬ LÝ SỰ CỐ
+- Windows hiện "Windows protected your PC": bấm "More info" rồi "Run anyway".
+- Cửa sổ đen hiện chữ đỏ rồi tắt ngay: giải nén lại toàn bộ file zip, đừng chạy trong file zip.
+- "Không mở được camera": tắt Zoom/Meet đang dùng camera; vào Cài đặt Windows > Quyền riêng tư > Camera và bật cho trình duyệt.
+- Trang không mở: mở Chrome rồi gõ tay địa chỉ  http://localhost:4173
+- KN và các màn đã qua được lưu trong trình duyệt của máy này, theo địa chỉ localhost:4173.

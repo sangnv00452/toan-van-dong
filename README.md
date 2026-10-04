@@ -14,6 +14,7 @@ npm install          # lần đầu, cần Internet
 npm run build        # chép thư viện và tải mô hình nhận diện tay
 start-offline.bat    # hoặc: npm run offline  →  http://localhost:4173
 ```
+**Bản đóng gói cho máy thi** (không cần Node, không cần mạng): `npm run package:local` tạo ra `release/MathFrog-local.zip`. Giải nén rồi nhấp đúp `CHAY-MATH-FROG.bat`.
 Chi tiết, kể cả cách đưa lên mạng và xử lý sự cố: [docs/run-guide.md](docs/run-guide.md).
 
 ## Tài liệu

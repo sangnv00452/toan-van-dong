@@ -20,6 +20,7 @@
     "offline": "npm run build && vite preview --open",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "vendor": "node scripts/vendor-mediapipe.mjs"
+    "vendor": "node scripts/vendor-mediapipe.mjs",
+    "package:local": "npm run build && node scripts/package-local.mjs"
   }
 }
