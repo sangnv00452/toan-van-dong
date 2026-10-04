@@ -3,7 +3,7 @@ import { PALETTE, W } from '../config';
 import { DwellButton } from '../core/dwell-button';
 import { panel, text, wrapLines } from '../core/draw';
 import { drawGreen, drawGreenChange, drawLilyPad, MORPH_TIME, drawPond, drawPondDecor, drawRankCard, speechBubble } from '../core/frog-art';
-import { rankIndex } from '../core/progress';
+import { RANKS, rankIndex } from '../core/progress';
 import { TouchTracker, inCircle } from '../games/round-kit';
 import { LearnScene } from './learn-scene';
 import { PracticeScene } from './practice-scene';
@@ -117,6 +117,8 @@ export class HomeScene implements Scene {
       mood: this.croaking > 0 ? 'eat' : 'happy',
       blink: this.croaking === 0 && this.t % 3.2 < 0.13,
       look: Math.sin(this.t * 0.7),
+      // Vua ếch (the top rank) wears a crown on the home screen.
+      crown: rankIndex(this.app.progress.xp) === RANKS.length - 1,
     } as const;
     const r = this.restart;
     if (r && r.t < MORPH_TIME) drawGreenChange(ctx, FROG_X, FROG_Y + bob, 1.6, r.fromXp, 0, r.t, looks);
@@ -126,9 +128,12 @@ export class HomeScene implements Scene {
     // As a tadpole, Green introduces himself differently.
     if (tip === TIPS[0] && rankIndex(this.app.progress.xp) === 0) tip = 'Chào bạn! Mình là nòng nọc Green. Gom 100 KN để mình hóa thành ếch nhé!';
     if (r && r.t < MORPH_TIME + 2.5) tip = 'Mình lại là nòng nọc rồi! Cùng học lại từ đầu nhé!';
-    speechBubble(ctx, 60, 240, 400, 92, FROG_X - 60, FROG_Y - 90);
-    wrapLines(ctx, tip, 22, 360).forEach((line, i, all) => {
-      text(ctx, line, 260, 286 + (i - (all.length - 1) / 2) * 28, { size: 22, color: PALETTE.ink, weight: 700 });
+    // The bubble stays left of Green's head (so the king's crown is never covered) and grows with the text.
+    const lines = wrapLines(ctx, tip, 22, 290);
+    const bubbleH = lines.length * 28 + 28;
+    speechBubble(ctx, 40, 236, 320, bubbleH, FROG_X - 70, FROG_Y - 80);
+    lines.forEach((line, i) => {
+      text(ctx, line, 200, 236 + bubbleH / 2 + (i - (lines.length - 1) / 2) * 28, { size: 22, color: PALETTE.ink, weight: 700 });
     });
 
     this.sound.label = this.app.progress.muted ? '🔇 Nhạc: tắt' : '🔊 Nhạc: bật';

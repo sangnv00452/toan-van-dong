@@ -15,6 +15,8 @@ export interface FrogOpts {
   look?: number;
   /** Red ninja headband (Ếch Ninja Phân Số). */
   headband?: boolean;
+  /** Golden crown on top of the head (rank Vua ếch). */
+  crown?: boolean;
 }
 
 const BODY = '#43a047';
@@ -143,6 +145,7 @@ export function drawFrog(ctx: CanvasRenderingContext2D, x: number, y: number, s:
     ctx.fill();
   }
   if (o.teacher) drawTeacherGear(ctx);
+  if (o.crown) drawCrown(ctx);
   if (o.headband) {
     ctx.fillStyle = '#e53935';
     ctx.fillRect(-56, -40, 112, 12);
@@ -322,6 +325,47 @@ export function drawGreenChange(ctx: CanvasRenderingContext2D, x: number, y: num
       const a = (i / 6) * Math.PI * 2 + t * 2;
       emoji(ctx, '✨', x + Math.cos(a) * spread, y + Math.sin(a) * spread * 0.7, 30 * s);
     }
+  }
+}
+
+/** A golden three-point crown with jewels, sitting between the eyes on top of the head. */
+function drawCrown(ctx: CanvasRenderingContext2D): void {
+  const pts: [number, number][] = [
+    [-38, -66],
+    [-40, -104],
+    [-20, -84],
+    [0, -118],
+    [20, -84],
+    [40, -104],
+    [38, -66],
+  ];
+  ctx.beginPath();
+  pts.forEach(([px, py], k) => (k ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
+  ctx.closePath();
+  ctx.fillStyle = '#F2C14E';
+  ctx.fill();
+  ctx.strokeStyle = '#8A6212';
+  ctx.lineWidth = 5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  // Band across the bottom
+  ctx.fillStyle = '#E0A92E';
+  ctx.fillRect(-36, -78, 72, 12);
+  ctx.strokeRect(-36, -78, 72, 12);
+  // Balls on the three points and jewels on the band
+  for (const [px, py] of [[-40, -104], [0, -118], [40, -104]]) {
+    ctx.beginPath();
+    ctx.arc(px, py, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#FFF4C2';
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+  for (const [px, color] of [[-20, '#3A86FF'], [0, '#E53935'], [20, '#3A86FF']] as const) {
+    ctx.beginPath();
+    ctx.arc(px, -72, 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
   }
 }
 
