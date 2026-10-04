@@ -4,8 +4,10 @@ export const H = 720;
 /** Height of the top bar (timer, scores, menu button). */
 export const HUD_H = 84;
 
-export const FONT = '"Segoe UI", "Nunito", "Helvetica Neue", Arial, sans-serif';
-export const EMOJI_FONT = '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
+// "MathFrogEmoji" is our bundled emoji font (src/core/emoji-font.ts). In FONT it sits
+// after the text fonts, so emoji inside sentences use it too instead of the system font.
+export const FONT = '"Segoe UI", "Nunito", "Helvetica Neue", Arial, "MathFrogEmoji", sans-serif';
+export const EMOJI_FONT = '"MathFrogEmoji", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif';
 
 /** 1 = Dễ, 2 = Vừa, 3 = Khó. */
 export type Level = 1 | 2 | 3;

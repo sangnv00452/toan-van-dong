@@ -9,3 +9,6 @@ Thumbs.db
 
 # Packed offline build (npm run package:local)
 release/
+
+# Downloaded source font for npm run emoji-font
+.cache/

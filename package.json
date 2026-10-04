@@ -21,6 +21,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "vendor": "node scripts/vendor-mediapipe.mjs",
-    "package:local": "npm run build && node scripts/package-local.mjs"
+    "package:local": "npm run build && node scripts/package-local.mjs",
+    "emoji-font": "node scripts/build-emoji-font.mjs"
   }
 }

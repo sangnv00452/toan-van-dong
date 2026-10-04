@@ -54,4 +54,5 @@ npm run typecheck
 | "Không mở được camera" | Kiểm tra camera không bị ứng dụng khác (Zoom, Meet) dùng; cho phép quyền camera trong trình duyệt và trong Windows (Cài đặt → Quyền riêng tư → Camera) |
 | "Không tải được nhận diện tay" | Chạy lại `npm run build` khi có mạng để tải mô hình, rồi chạy lại `start-offline.bat` |
 | Báo cổng 4173 đang bận | Đóng cửa sổ `start-offline` cũ đang chạy rồi mở lại |
+| Hình emoji hiện thành ô vuông khung đen | Đã sửa: game mang theo font emoji riêng (`public/fonts/math-frog-emoji.woff`). Nếu thêm emoji mới vào code thì chạy `npm run emoji-font` rồi build lại |
 | Chấm vàng giật hoặc mất | Thêm đèn, bớt người đứng phía sau, đưa tay rõ vào khung hình |
